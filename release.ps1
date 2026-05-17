@@ -17,13 +17,13 @@ $ExpectedFileName = "ApoLabSurveillanceSystem_v$Version.unitypackage"
 # ── 1. unitypackage の解決 ─────────────────────────────────────────────────────
 
 if (-not $PackagePath) {
-    $PackagePath = Join-Path $env:USERPROFILE "Downloads\$ExpectedFileName"
+    $PackagePath = Join-Path $PSScriptRoot "Releases\$ExpectedFileName"
 }
 
 if (-not (Test-Path $PackagePath)) {
     Write-Error "unitypackage が見つかりません: $PackagePath"
-    Write-Host "Unity から以下のファイル名でエクスポートしてください:"
-    Write-Host "  $ExpectedFileName"
+    Write-Host "Unity から以下のパスへエクスポートしてください:"
+    Write-Host "  Releases\$ExpectedFileName"
     exit 1
 }
 

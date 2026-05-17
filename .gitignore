@@ -33,3 +33,6 @@ UserSettings/
 Packages/com.vrchat.base/
 Packages/com.vrchat.worlds/
 Packages/packages-lock.json
+
+# Release artifacts (managed via GitHub Releases)
+Releases/
