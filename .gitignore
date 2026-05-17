@@ -23,3 +23,13 @@ ClientSimStorage/
 # Build results
 [Bb]uild/
 [Bb]uilds/
+
+# User-specific
+UserSettings/
+.vscode/
+.claude/
+
+# VCC installed packages (dependency contents, not definitions)
+Packages/com.vrchat.base/
+Packages/com.vrchat.worlds/
+Packages/packages-lock.json
