@@ -32,6 +32,7 @@ UserSettings/
 # VCC installed packages (dependency contents, not definitions)
 Packages/com.vrchat.base/
 Packages/com.vrchat.worlds/
+Packages/net.narazaka.vrchat.tmp-fallback-fonts-jp/
 Packages/packages-lock.json
 
 # Release artifacts (managed via GitHub Releases)
