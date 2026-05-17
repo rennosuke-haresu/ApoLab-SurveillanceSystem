@@ -76,5 +76,5 @@ Assets/ApoLab/SurveillanceSystem/
 
 ## ライセンス
 
-© 2026 ApoLab (Apocrypha-Lab). All rights reserved.  
-本パッケージは購入者による VRChat ワールドへの利用・改変を許可します。再配布・転売は禁止です。
+本プロジェクトは **VN3ライセンス** のもとに配布されます。  
+詳細は [LICENSE.md](LICENSE.md) および `Licenses/` フォルダ内の PDF を参照してください。
