@@ -51,7 +51,7 @@ if ($LASTEXITCODE -ne 0) { Write-Error "git tag 失敗（既に存在する可�
 
 # ── 4. git push ───────────────────────────────────────────────────────────────
 
-git push origin master
+git push origin main
 git push origin $Tag
 if ($LASTEXITCODE -ne 0) { Write-Error "git push 失敗"; exit 1 }
 

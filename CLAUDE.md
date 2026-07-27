@@ -26,7 +26,7 @@ Assets/ApoLab/SurveillanceSystem/
 ## 命名規則
 - Namespace: `ApoLab.SurveillanceSystem`
 - スクリプト: PascalCase
-- ブランチ: `feature/*`, `fix/*`, `release/v*`
+- ブランチ: ベースは `main`。作業ブランチは `feature/*`, `fix/*`, `release/v*`
 
 ## 実装の注意点
 - `sharedMaterial` は Udon で動作しない → `material`（インスタンス）を使う
