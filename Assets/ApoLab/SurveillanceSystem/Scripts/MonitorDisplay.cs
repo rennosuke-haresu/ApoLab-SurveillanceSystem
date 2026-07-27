@@ -1,7 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using VRC.SDKBase;
-using VRC.Udon;
 using UdonSharp;
 using TMPro;
 
@@ -10,6 +7,7 @@ namespace ApoLab.SurveillanceSystem
     /// <summary>
     /// モニター表示制御クラス - 監視システムのモニター画面制御
     /// カメラ映像の表示とカメラ切り替え機能を提供します
+    /// ※ 表示状態はプレイヤーごとにローカルで、他プレイヤーには同期されません
     /// </summary>
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class MonitorDisplay : UdonSharpBehaviour
@@ -88,14 +86,17 @@ namespace ApoLab.SurveillanceSystem
             ValidateCameraControllers();
 
             // デフォルトはOFF状態
-            SetDisplayOff();
+            _SetDisplayOff();
 
             // UI初期化
             UpdateCameraNameDisplay();
 
             _isInitialized = true;
 
-            LogDebug($"MonitorDisplay initialized - ID: {monitorId}, Name: {monitorName}, Cameras: {cameraControllers.Length}");
+            if (enableDebugLog)
+            {
+                LogDebug($"MonitorDisplay initialized - ID: {monitorId}, Name: {monitorName}, Cameras: {cameraControllers.Length}");
+            }
         }
 
 
@@ -106,14 +107,17 @@ namespace ApoLab.SurveillanceSystem
         {
             if (cameraControllers == null || cameraControllers.Length == 0)
             {
-                LogWarning($"MonitorDisplay (ID: {monitorId}): カメラコントローラーが設定されていません");
+                if (enableDebugLog)
+                {
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): カメラコントローラーが設定されていません");
+                }
                 return;
             }
 
             // null要素のチェック
             for (int i = 0; i < cameraControllers.Length; i++)
             {
-                if (cameraControllers[i] == null)
+                if (cameraControllers[i] == null && enableDebugLog)
                 {
                     LogWarning($"MonitorDisplay (ID: {monitorId}): カメラコントローラー[{i}]がnullです");
                 }
@@ -124,20 +128,29 @@ namespace ApoLab.SurveillanceSystem
         /// 指定したインデックスのカメラを表示
         /// </summary>
         /// <param name="cameraIndex">カメラインデックス</param>
-        public void DisplayCamera(int cameraIndex)
+        public void _DisplayCamera(int cameraIndex)
         {
             if (!_isInitialized)
             {
-                LogWarning($"MonitorDisplay (ID: {monitorId}) is not initialized");
+                if (enableDebugLog)
+                {
+                    LogWarning($"MonitorDisplay (ID: {monitorId}) is not initialized");
+                }
                 return;
             }
 
             // インデックスの範囲チェック
-            if (cameraIndex < 0 || cameraIndex >= cameraControllers.Length || cameraControllers[cameraIndex] == null)
+            if (cameraControllers == null || cameraIndex < 0 || cameraIndex >= cameraControllers.Length || cameraControllers[cameraIndex] == null)
             {
-                LogWarning($"MonitorDisplay (ID: {monitorId}): 無効なカメラインデックス {cameraIndex}");
+                if (enableDebugLog)
+                {
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): 無効なカメラインデックス {cameraIndex}");
+                }
                 return;
             }
+
+            // 既に同じカメラを表示中なら何もしない（表示カウントの往復を避ける）
+            if (_currentCameraIndex == cameraIndex) return;
 
             CameraController targetCamera = cameraControllers[cameraIndex];
 
@@ -148,30 +161,33 @@ namespace ApoLab.SurveillanceSystem
                 return;
             }
 
-            // 前のカメラを無効化
-            DeactivateCurrentCamera();
+            // 前のカメラの表示を解除
+            RemoveCurrentViewer();
 
-            // 新しいカメラをアクティブ化
-            targetCamera.SetCameraActive(true);
+            // 新しいカメラの表示を登録
+            targetCamera._AddViewer();
             displayRenderer.material.mainTexture = targetCamera.renderTexture;
             _currentCameraIndex = cameraIndex;
 
             // UI更新
             UpdateCameraNameDisplay();
 
-            LogDebug($"Monitor {monitorId} switched to Camera {cameraIndex} ({targetCamera.GetCameraName()})");
+            if (enableDebugLog)
+            {
+                LogDebug($"Monitor {monitorId} switched to Camera {cameraIndex} ({targetCamera.GetCameraName()})");
+            }
         }
 
         /// <summary>
         /// 表示をOFFに設定
         /// </summary>
-        public void SetDisplayOff()
+        public void _SetDisplayOff()
         {
             // 初期化中の呼び出しも許可（displayRendererのみチェック）
             if (displayRenderer == null) return;
 
-            // 現在のカメラを無効化
-            DeactivateCurrentCamera();
+            // 現在のカメラの表示を解除
+            RemoveCurrentViewer();
 
             displayRenderer.material.mainTexture = offTexture;
             _currentCameraIndex = -1;
@@ -180,18 +196,22 @@ namespace ApoLab.SurveillanceSystem
             if (_isInitialized)
             {
                 UpdateCameraNameDisplay();
-                LogDebug($"Monitor {monitorId} display turned OFF");
+
+                if (enableDebugLog)
+                {
+                    LogDebug($"Monitor {monitorId} display turned OFF");
+                }
             }
         }
 
         /// <summary>
-        /// 現在アクティブなカメラを無効化
+        /// 現在表示中のカメラの表示登録を解除
         /// </summary>
-        private void DeactivateCurrentCamera()
+        private void RemoveCurrentViewer()
         {
-            if (_currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
+            if (cameraControllers != null && _currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
             {
-                cameraControllers[_currentCameraIndex].SetCameraActive(false);
+                cameraControllers[_currentCameraIndex]._RemoveViewer();
             }
         }
 
@@ -202,7 +222,7 @@ namespace ApoLab.SurveillanceSystem
         {
             if (cameraNameText == null) return;
 
-            if (_currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
+            if (cameraControllers != null && _currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
             {
                 cameraNameText.text = cameraControllers[_currentCameraIndex].GetCameraName();
             }
@@ -213,35 +233,74 @@ namespace ApoLab.SurveillanceSystem
         }
 
         /// <summary>
-        /// 次のカメラに切り替え
+        /// 指定方向で次に表示できる有効なカメラのインデックスを探す
         /// </summary>
-        public void NextCamera()
+        /// <param name="startIndex">探索の起点（-1 = OFF状態）</param>
+        /// <param name="step">+1で順送り、-1で逆送り</param>
+        /// <returns>見つかったインデックス。見つからない場合は -1</returns>
+        private int FindValidIndex(int startIndex, int step)
         {
-            if (!_isInitialized || cameraControllers.Length == 0) return;
+            if (cameraControllers == null || cameraControllers.Length == 0) return -1;
 
-            int nextIndex = _currentCameraIndex + 1;
-            if (nextIndex >= cameraControllers.Length)
+            int count = cameraControllers.Length;
+            int index = startIndex;
+
+            for (int i = 0; i < count; i++)
             {
-                nextIndex = 0; // 最初のカメラに戻る
+                index += step;
+
+                if (index >= count) index = 0;
+                else if (index < 0) index = count - 1;
+
+                if (cameraControllers[index] != null && cameraControllers[index].IsValidConfiguration())
+                {
+                    return index;
+                }
             }
 
-            DisplayCamera(nextIndex);
+            return -1;
         }
 
         /// <summary>
-        /// 前のカメラに切り替え
+        /// 次のカメラに切り替え（無効なカメラは読み飛ばす）
         /// </summary>
-        public void PreviousCamera()
+        public void _NextCamera()
         {
-            if (!_isInitialized || cameraControllers.Length == 0) return;
+            if (!_isInitialized) return;
 
-            int prevIndex = _currentCameraIndex - 1;
-            if (prevIndex < 0)
+            int nextIndex = FindValidIndex(_currentCameraIndex, 1);
+
+            if (nextIndex < 0)
             {
-                prevIndex = cameraControllers.Length - 1; // 最後のカメラに移動
+                if (enableDebugLog)
+                {
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): 表示できるカメラがありません");
+                }
+                return;
             }
 
-            DisplayCamera(prevIndex);
+            _DisplayCamera(nextIndex);
+        }
+
+        /// <summary>
+        /// 前のカメラに切り替え（無効なカメラは読み飛ばす）
+        /// </summary>
+        public void _PreviousCamera()
+        {
+            if (!_isInitialized) return;
+
+            int prevIndex = FindValidIndex(_currentCameraIndex, -1);
+
+            if (prevIndex < 0)
+            {
+                if (enableDebugLog)
+                {
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): 表示できるカメラがありません");
+                }
+                return;
+            }
+
+            _DisplayCamera(prevIndex);
         }
 
         /// <summary>
@@ -250,7 +309,7 @@ namespace ApoLab.SurveillanceSystem
         /// <returns>状態情報文字列</returns>
         public string GetStatusInfo()
         {
-            string cameraName = (_currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
+            string cameraName = (cameraControllers != null && _currentCameraIndex >= 0 && _currentCameraIndex < cameraControllers.Length && cameraControllers[_currentCameraIndex] != null)
                 ? cameraControllers[_currentCameraIndex].GetCameraName()
                 : "OFF";
 
@@ -267,6 +326,8 @@ namespace ApoLab.SurveillanceSystem
         }
 
         #region Debug Logging
+        // 補間文字列を渡す場合は、呼び出し側で enableDebugLog をガードすること
+        // （false でも文字列生成のコストが発生するため）
         private void LogDebug(string message)
         {
             if (enableDebugLog)

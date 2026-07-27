@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using VRC.SDKBase;
-using VRC.Udon;
 using UdonSharp;
 using TMPro;
 
@@ -10,6 +8,7 @@ namespace ApoLab.SurveillanceSystem
     /// <summary>
     /// カメラ切り替えUI制御クラス - シンプルな前後切り替えインターフェース
     /// [◀][▶][OFF]の3ボタンでカメラを簡単に切り替えます
+    /// ※ カメラ名の表示は MonitorDisplay 側（Camera Name Text）が担当します
     /// </summary>
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class CameraSelector : UdonSharpBehaviour
@@ -38,9 +37,6 @@ namespace ApoLab.SurveillanceSystem
         public Image offButtonImage;
 
         [Header("UI表示要素")]
-        [Tooltip("現在のカメラ名を表示するTextMeshPro")]
-        public TextMeshProUGUI currentCameraText;
-
         [Tooltip("モニター名を表示するTextMeshPro")]
         public TextMeshProUGUI monitorNameText;
 
@@ -94,7 +90,10 @@ namespace ApoLab.SurveillanceSystem
 
             _isInitialized = true;
 
-            LogDebug($"CameraSelector initialized for Monitor: {targetMonitor.GetMonitorName()}");
+            if (enableDebugLog)
+            {
+                LogDebug($"CameraSelector initialized for Monitor: {targetMonitor.GetMonitorName()}");
+            }
         }
 
         /// <summary>
@@ -143,60 +142,69 @@ namespace ApoLab.SurveillanceSystem
         }
 
         /// <summary>
-        /// 前のカメラボタン押下時の処理
+        /// 前のカメラボタン押下時の処理（ボタンの OnClick から呼び出し）
         /// </summary>
         public void OnPreviousButtonClick()
         {
             if (!_isInitialized || targetMonitor == null) return;
 
             // 視覚的フィードバック
-            ShowButtonFeedback(previousButton, _originalPrevColor);
+            ShowButtonFeedback(previousButton);
 
             // カメラ切り替え実行
-            targetMonitor.PreviousCamera();
+            targetMonitor._PreviousCamera();
 
             // UI更新
             UpdateUI();
 
-            LogDebug($"Previous camera button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            if (enableDebugLog)
+            {
+                LogDebug($"Previous camera button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            }
         }
 
         /// <summary>
-        /// 次のカメラボタン押下時の処理
+        /// 次のカメラボタン押下時の処理（ボタンの OnClick から呼び出し）
         /// </summary>
         public void OnNextButtonClick()
         {
             if (!_isInitialized || targetMonitor == null) return;
 
             // 視覚的フィードバック
-            ShowButtonFeedback(nextButton, _originalNextColor);
+            ShowButtonFeedback(nextButton);
 
             // カメラ切り替え実行
-            targetMonitor.NextCamera();
+            targetMonitor._NextCamera();
 
             // UI更新
             UpdateUI();
 
-            LogDebug($"Next camera button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            if (enableDebugLog)
+            {
+                LogDebug($"Next camera button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            }
         }
 
         /// <summary>
-        /// OFFボタン押下時の処理
+        /// OFFボタン押下時の処理（ボタンの OnClick から呼び出し）
         /// </summary>
         public void OnOffButtonClick()
         {
             if (!_isInitialized || targetMonitor == null) return;
 
             // 視覚的フィードバック
-            ShowButtonFeedback(offButton, _originalOffColor);
+            ShowButtonFeedback(offButton);
 
             // 表示OFF実行
-            targetMonitor.SetDisplayOff();
+            targetMonitor._SetDisplayOff();
 
             // UI更新
             UpdateUI();
 
-            LogDebug($"Off button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            if (enableDebugLog)
+            {
+                LogDebug($"Off button clicked - Monitor: {targetMonitor.GetMonitorId()}");
+            }
         }
 
         /// <summary>
@@ -206,43 +214,11 @@ namespace ApoLab.SurveillanceSystem
         {
             if (targetMonitor == null) return;
 
-            // 現在のカメラ名表示更新
-            UpdateCameraNameDisplay();
-
             // モニター名表示更新
             UpdateMonitorNameDisplay();
 
             // ボタンの有効/無効状態更新
             UpdateButtonStates();
-        }
-
-        /// <summary>
-        /// 現在のカメラ名表示の更新
-        /// </summary>
-        private void UpdateCameraNameDisplay()
-        {
-            if (currentCameraText == null) return;
-
-            string displayText;
-            if (targetMonitor.IsDisplayActive)
-            {
-                // アクティブなカメラ名を表示
-                int currentIndex = targetMonitor.CurrentCameraIndex;
-                if (currentIndex >= 0 && currentIndex < targetMonitor.cameraControllers.Length && targetMonitor.cameraControllers[currentIndex] != null)
-                {
-                    displayText = targetMonitor.cameraControllers[currentIndex].GetCameraName();
-                }
-                else
-                {
-                    displayText = $"Camera {currentIndex + 1}";
-                }
-            }
-            else
-            {
-                displayText = "OFF";
-            }
-
-            currentCameraText.text = displayText;
         }
 
         /// <summary>
@@ -277,8 +253,7 @@ namespace ApoLab.SurveillanceSystem
         /// ボタン押下時の視覚的フィードバックを表示
         /// </summary>
         /// <param name="button">対象ボタン</param>
-        /// <param name="originalColor">元の色</param>
-        private void ShowButtonFeedback(Button button, Color originalColor)
+        private void ShowButtonFeedback(Button button)
         {
             if (!enableButtonFeedback || button == null) return;
 
@@ -350,27 +325,21 @@ namespace ApoLab.SurveillanceSystem
         }
 
         /// <summary>
-        /// 手動でUI更新を実行（外部から呼び出し可能）
+        /// 手動でUI更新を実行（SurveillanceManagerから呼び出し）
         /// </summary>
-        public void RefreshUI()
+        public void _RefreshUI()
         {
             UpdateUI();
         }
 
         #region Debug Logging
+        // 補間文字列を渡す場合は、呼び出し側で enableDebugLog をガードすること
+        // （false でも文字列生成のコストが発生するため）
         private void LogDebug(string message)
         {
             if (enableDebugLog)
             {
                 Debug.Log($"[CameraSelector] {message}");
-            }
-        }
-
-        private void LogWarning(string message)
-        {
-            if (enableDebugLog)
-            {
-                Debug.LogWarning($"[CameraSelector] {message}");
             }
         }
 

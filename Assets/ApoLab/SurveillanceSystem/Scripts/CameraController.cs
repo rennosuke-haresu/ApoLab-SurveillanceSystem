@@ -1,6 +1,4 @@
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 using UdonSharp;
 
 namespace ApoLab.SurveillanceSystem
@@ -33,10 +31,20 @@ namespace ApoLab.SurveillanceSystem
         private bool _isActive = false;
         private bool _isInitialized = false;
 
+        // このカメラを表示しているモニターの数
+        // 複数モニターが同じカメラを映しているとき、1枚がOFFになっても
+        // 残りのモニターの映像が止まらないようにするためのカウンタ
+        private int _viewerCount = 0;
+
         /// <summary>
         /// カメラのアクティブ状態を取得
         /// </summary>
         public bool IsActive => _isActive;
+
+        /// <summary>
+        /// このカメラを表示しているモニターの数
+        /// </summary>
+        public int ViewerCount => _viewerCount;
 
         /// <summary>
         /// カメラ名を取得
@@ -74,54 +82,97 @@ namespace ApoLab.SurveillanceSystem
             // カメラ設定
             targetCamera.targetTexture = renderTexture;
 
-            // デフォルトは非アクティブ状態
-            SetCameraActive(false);
-
             _isInitialized = true;
 
-            LogDebug($"CameraController initialized - ID: {cameraId}, Name: {cameraName}");
+            // デフォルトは非アクティブ状態
+            _viewerCount = 0;
+            _SetCameraActive(false);
+
+            if (enableDebugLog)
+            {
+                LogDebug($"CameraController initialized - ID: {cameraId}, Name: {cameraName}");
+            }
         }
 
         /// <summary>
-        /// カメラのアクティブ状態を設定
+        /// 表示中のモニターを1台追加する（1台以上でカメラが有効になる）
+        /// </summary>
+        public void _AddViewer()
+        {
+            _viewerCount++;
+            _SetCameraActive(true);
+        }
+
+        /// <summary>
+        /// 表示中のモニターを1台減らす（0台になったらカメラを無効化）
+        /// </summary>
+        public void _RemoveViewer()
+        {
+            _viewerCount--;
+
+            if (_viewerCount <= 0)
+            {
+                _viewerCount = 0;
+                _SetCameraActive(false);
+            }
+        }
+
+        /// <summary>
+        /// 表示カウントを0に戻してカメラを無効化する（システム初期化用）
+        /// </summary>
+        public void _ResetViewers()
+        {
+            _viewerCount = 0;
+            _SetCameraActive(false);
+        }
+
+        /// <summary>
+        /// カメラのアクティブ状態を直接設定
+        /// ※ 表示カウントを経由しないため、通常は _AddViewer / _RemoveViewer を使用してください
         /// </summary>
         /// <param name="active">アクティブ状態</param>
-        public void SetCameraActive(bool active)
+        public void _SetCameraActive(bool active)
         {
             if (!_isInitialized)
             {
-                LogWarning($"CameraController (ID: {cameraId}) is not initialized");
+                if (enableDebugLog)
+                {
+                    LogWarning($"CameraController (ID: {cameraId}) is not initialized");
+                }
                 return;
             }
 
             _isActive = active;
             targetCamera.enabled = active;
 
-            LogDebug($"Camera {cameraId} ({cameraName}) set to {(active ? "Active" : "Inactive")}");
+            if (enableDebugLog)
+            {
+                LogDebug($"Camera {cameraId} ({cameraName}) set to {(active ? "Active" : "Inactive")}");
+            }
         }
 
         /// <summary>
-        /// カメラのアクティブ状態を切り替え
+        /// カメラのアクティブ状態を切り替え（表示カウントを経由しません）
         /// </summary>
-        public void ToggleCameraActive()
+        public void _ToggleCameraActive()
         {
-            SetCameraActive(!_isActive);
+            _SetCameraActive(!_isActive);
         }
 
         /// <summary>
-        /// カメラをアクティブに設定
+        /// カメラをアクティブに設定（表示カウントを経由しません）
         /// </summary>
-        public void ActivateCamera()
+        public void _ActivateCamera()
         {
-            SetCameraActive(true);
+            _SetCameraActive(true);
         }
 
         /// <summary>
-        /// カメラを非アクティブに設定
+        /// カメラを非アクティブに設定（表示カウントを経由しません）
         /// </summary>
-        public void DeactivateCamera()
+        public void _DeactivateCamera()
         {
-            SetCameraActive(false);
+            _SetCameraActive(false);
         }
 
         /// <summary>
@@ -134,23 +185,18 @@ namespace ApoLab.SurveillanceSystem
         }
 
         /// <summary>
-        /// カメラの設定が有効かチェック
+        /// カメラの設定が有効かチェック（副作用なし）
         /// </summary>
         /// <returns>設定が有効な場合true</returns>
         public bool IsValidConfiguration()
         {
-            // 外部から呼ばれた時点で未初期化なら初期化を試行
-            if (!_isInitialized && targetCamera != null && renderTexture != null)
-            {
-                InitializeCamera();
-            }
-            return targetCamera != null && renderTexture != null && _isInitialized;
+            return _isInitialized && targetCamera != null && renderTexture != null;
         }
 
         /// <summary>
-        /// 外部からの初期化要求（SurveillanceManagerから呼び出し用）
+        /// 未初期化なら初期化を試行する（SurveillanceManagerから検証前に呼び出し）
         /// </summary>
-        public void EnsureInitialized()
+        public void _EnsureInitialized()
         {
             if (!_isInitialized)
             {
@@ -159,6 +205,8 @@ namespace ApoLab.SurveillanceSystem
         }
 
         #region Debug Logging
+        // 補間文字列を渡す場合は、呼び出し側で enableDebugLog をガードすること
+        // （false でも文字列生成のコストが発生するため）
         private void LogDebug(string message)
         {
             if (enableDebugLog)

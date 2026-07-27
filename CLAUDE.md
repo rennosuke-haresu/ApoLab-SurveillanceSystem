@@ -31,8 +31,10 @@ Assets/ApoLab/SurveillanceSystem/
 ## 実装の注意点
 - `sharedMaterial` は Udon で動作しない → `material`（インスタンス）を使う
 - `offTexture` は public フィールドで保持
-- RenderTexture サイズ: **640×360**（16:9）
-- カメラ `Allow HDR: On`
+- RenderTexture: サイズ **640×360**（16:9）/ Depth Buffer は **24bit**（YAML: `m_DepthStencilFormat: 92`）。深度なしだと映像内の前後関係が壊れる
+- カメラ: `Allow HDR: Off`（出力先 RT が非 HDR のため効果なし）、`Target Eye: None`、`Far Clip: 100`、Culling Mask から UiMenu / MirrorReflection を除外
+- 状態を変更する public メソッドは `_` 接頭辞を付ける（ネットワークイベント経由の呼び出しを防ぐ）。ただしボタン OnClick から呼ばれる `OnPreviousButtonClick` / `OnNextButtonClick` / `OnOffButtonClick` は互換性のため接頭辞なしを維持
+- カメラの ON/OFF は `CameraController` の表示カウント（`_AddViewer` / `_RemoveViewer`）で制御する。複数モニターが同じカメラを見ている状態を壊さないため、`Camera.enabled` を直接操作しない
 - `MonitorMaterial.mat` シェーダー: `Unlit/Texture`
 
 ## Git 管理対象

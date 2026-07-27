@@ -1,6 +1,4 @@
 using UnityEngine;
-using VRC.SDKBase;
-using VRC.Udon;
 using UdonSharp;
 
 namespace ApoLab.SurveillanceSystem
@@ -55,13 +53,13 @@ namespace ApoLab.SurveillanceSystem
         /// </summary>
         public void _DelayedInitialize()
         {
-            InitializeSystem();
+            _InitializeSystem();
         }
 
         /// <summary>
         /// システム全体の初期化処理
         /// </summary>
-        public void InitializeSystem()
+        public void _InitializeSystem()
         {
             LogDebug("Initializing...");
 
@@ -92,7 +90,7 @@ namespace ApoLab.SurveillanceSystem
             // 初期ステータス表示
             if (showDetailedStatus)
             {
-                DisplaySystemStatus();
+                _DisplaySystemStatus();
             }
         }
 
@@ -113,9 +111,15 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allCameras[i] == null)
                 {
-                    LogWarning($"Camera controller [{i}] is null");
+                    if (enableDebugLog)
+                    {
+                        LogWarning($"Camera controller [{i}] is null");
+                    }
                     continue;
                 }
+
+                // Start()が未実行のケースに備えて初期化を保証してから検証する
+                allCameras[i]._EnsureInitialized();
 
                 if (allCameras[i].IsValidConfiguration())
                 {
@@ -127,7 +131,10 @@ namespace ApoLab.SurveillanceSystem
                 }
             }
 
-            LogDebug($"Camera initialization: {validCameras}/{allCameras.Length} cameras valid");
+            if (enableDebugLog)
+            {
+                LogDebug($"Camera initialization: {validCameras}/{allCameras.Length} cameras valid");
+            }
             return validCameras > 0;
         }
 
@@ -148,7 +155,10 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allMonitors[i] == null)
                 {
-                    LogWarning($"Monitor display [{i}] is null");
+                    if (enableDebugLog)
+                    {
+                        LogWarning($"Monitor display [{i}] is null");
+                    }
                     continue;
                 }
 
@@ -168,20 +178,25 @@ namespace ApoLab.SurveillanceSystem
                 }
             }
 
-            LogDebug($"Monitor initialization: {validMonitors}/{allMonitors.Length} monitors valid");
+            if (enableDebugLog)
+            {
+                LogDebug($"Monitor initialization: {validMonitors}/{allMonitors.Length} monitors valid");
+            }
             return validMonitors > 0;
         }
 
         /// <summary>
         /// カメラセレクターの初期化
+        /// セレクターは任意のコンポーネントのため、検証結果にかかわらず常に true を返します
+        /// （設定不備は個別にログへ出力されます）
         /// </summary>
-        /// <returns>成功した場合true</returns>
+        /// <returns>常にtrue</returns>
         private bool InitializeSelectors()
         {
             if (allSelectors == null || allSelectors.Length == 0)
             {
                 LogWarning("No camera selectors configured in the system");
-                return true; // セレクターがなくてもシステムは動作可能
+                return true;
             }
 
             int validSelectors = 0;
@@ -189,7 +204,10 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allSelectors[i] == null)
                 {
-                    LogWarning($"Camera selector [{i}] is null");
+                    if (enableDebugLog)
+                    {
+                        LogWarning($"Camera selector [{i}] is null");
+                    }
                     continue;
                 }
 
@@ -203,7 +221,10 @@ namespace ApoLab.SurveillanceSystem
                 }
             }
 
-            LogDebug($"Selector initialization: {validSelectors}/{allSelectors.Length} selectors valid");
+            if (enableDebugLog)
+            {
+                LogDebug($"Selector initialization: {validSelectors}/{allSelectors.Length} selectors valid");
+            }
             return true;
         }
 
@@ -229,11 +250,11 @@ namespace ApoLab.SurveillanceSystem
         /// </summary>
         private void SetInitialState()
         {
-            // 全カメラを初期状態（非アクティブ）に設定
-            DeactivateAllCameras();
-
             // 全モニターをOFF状態に設定
-            TurnOffAllMonitors();
+            _TurnOffAllMonitors();
+
+            // 全カメラの表示カウントをリセットして非アクティブに設定
+            _DeactivateAllCameras();
 
             LogDebug("System set to initial state (all cameras and monitors off)");
         }
@@ -249,15 +270,15 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allSelectors[i] != null)
                 {
-                    allSelectors[i].RefreshUI();
+                    allSelectors[i]._RefreshUI();
                 }
             }
         }
 
         /// <summary>
-        /// 全カメラを非アクティブに設定
+        /// 全カメラの表示カウントをリセットし、非アクティブに設定
         /// </summary>
-        public void DeactivateAllCameras()
+        public void _DeactivateAllCameras()
         {
             if (allCameras == null) return;
 
@@ -265,7 +286,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allCameras[i] != null && allCameras[i].IsValidConfiguration())
                 {
-                    allCameras[i].DeactivateCamera();
+                    allCameras[i]._ResetViewers();
                 }
             }
 
@@ -275,7 +296,7 @@ namespace ApoLab.SurveillanceSystem
         /// <summary>
         /// 全モニターをOFF状態に設定
         /// </summary>
-        public void TurnOffAllMonitors()
+        public void _TurnOffAllMonitors()
         {
             if (allMonitors == null) return;
 
@@ -283,7 +304,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (allMonitors[i] != null && allMonitors[i].IsValidConfiguration())
                 {
-                    allMonitors[i].SetDisplayOff();
+                    allMonitors[i]._SetDisplayOff();
                 }
             }
 
@@ -293,8 +314,10 @@ namespace ApoLab.SurveillanceSystem
         /// <summary>
         /// システム状態の詳細表示
         /// </summary>
-        public void DisplaySystemStatus()
+        public void _DisplaySystemStatus()
         {
+            if (!enableDebugLog) return;
+
             LogDebug("=== System Status ===");
             LogDebug($"Initialized: {_isInitialized}");
             LogDebug($"Cameras: {(allCameras != null ? allCameras.Length : 0)} configured");
@@ -306,17 +329,17 @@ namespace ApoLab.SurveillanceSystem
         /// <summary>
         /// システムの完全リセット
         /// </summary>
-        public void ResetSystem()
+        public void _ResetSystem()
         {
             LogDebug("Resetting surveillance system...");
 
             // 全コンポーネントを初期状態に戻す
-            DeactivateAllCameras();
-            TurnOffAllMonitors();
+            _TurnOffAllMonitors();
+            _DeactivateAllCameras();
 
             // システム再初期化
             _isInitialized = false;
-            InitializeSystem();
+            _InitializeSystem();
         }
 
         /// <summary>
@@ -350,6 +373,8 @@ namespace ApoLab.SurveillanceSystem
         }
 
         #region Debug Logging
+        // 補間文字列を渡す場合は、呼び出し側で enableDebugLog をガードすること
+        // （false でも文字列生成のコストが発生するため）
         private void LogDebug(string message)
         {
             if (enableDebugLog)
@@ -369,13 +394,6 @@ namespace ApoLab.SurveillanceSystem
         private void LogError(string message)
         {
             Debug.LogError($"[SurveillanceManager] {message}");
-        }
-        #endregion
-
-        #region Editor Support
-        private void OnValidate()
-        {
-            // Editorでの設定検証
         }
         #endregion
     }

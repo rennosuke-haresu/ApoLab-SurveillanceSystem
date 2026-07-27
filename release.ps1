@@ -31,9 +31,13 @@ Write-Host "unitypackage: $PackagePath" -ForegroundColor Cyan
 
 # ── 2. git commit ──────────────────────────────────────────────────────────────
 
-$status = git status --porcelain
-if ($status) {
-    git add Assets/ ProjectSettings/ Packages/manifest.json Packages/vpm-manifest.json CLAUDE.md .gitignore
+# .gitignore で除外済みのファイル（Library/ Temp/ Releases/ など）は含まれない
+git add -A
+if ($LASTEXITCODE -ne 0) { Write-Error "git add 失敗"; exit 1 }
+
+# ステージに差分があるときだけコミットする（--quiet は差分ありで exit 1）
+git diff --cached --quiet
+if ($LASTEXITCODE -ne 0) {
     git commit -m "release: $Tag"
     if ($LASTEXITCODE -ne 0) { Write-Error "git commit 失敗"; exit 1 }
 } else {
