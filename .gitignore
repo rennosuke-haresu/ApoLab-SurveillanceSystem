@@ -37,3 +37,7 @@ Packages/packages-lock.json
 
 # Release artifacts (managed via GitHub Releases)
 Releases/
+
+# AI assistant instructions (local only)
+CLAUDE.md
+AGENTS.md
