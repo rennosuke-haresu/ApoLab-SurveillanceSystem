@@ -237,7 +237,7 @@ namespace ApoLab.SurveillanceSystem
         private void UpdateButtonStates()
         {
             // カメラが1台もない場合はボタンを無効化
-            bool hasValidCameras = targetMonitor.IsValidConfiguration() && targetMonitor.cameraControllers.Length > 0;
+            bool hasValidCameras = targetMonitor.HasCameras();
 
             if (previousButton != null)
                 previousButton.interactable = hasValidCameras;

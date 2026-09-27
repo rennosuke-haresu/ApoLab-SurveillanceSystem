@@ -139,6 +139,9 @@ namespace ApoLab.SurveillanceSystem
                 return;
             }
 
+            // 非アクティブなモニターのためにカメラを描画させない（OnDisable で解除した表示を再登録しない）
+            if (!gameObject.activeInHierarchy) return;
+
             // インデックスの範囲チェック
             if (cameraControllers == null || cameraIndex < 0 || cameraIndex >= cameraControllers.Length || cameraControllers[cameraIndex] == null)
             {
@@ -201,6 +204,17 @@ namespace ApoLab.SurveillanceSystem
                 {
                     LogDebug($"Monitor {monitorId} display turned OFF");
                 }
+            }
+        }
+
+        /// <summary>
+        /// モニターが非アクティブになったら表示を解除（見られていないカメラの描画を止めるため）
+        /// </summary>
+        private void OnDisable()
+        {
+            if (_isInitialized)
+            {
+                _SetDisplayOff();
             }
         }
 
@@ -314,6 +328,15 @@ namespace ApoLab.SurveillanceSystem
                 : "OFF";
 
             return $"Monitor {monitorId}: {monitorName} - {cameraName}";
+        }
+
+        /// <summary>
+        /// 切り替え対象のカメラが設定されているか（初期化状態に依存しないため、Start の実行順に左右されない）
+        /// </summary>
+        /// <returns>表示先とカメラが1台以上設定されている場合true</returns>
+        public bool HasCameras()
+        {
+            return displayRenderer != null && cameraControllers != null && cameraControllers.Length > 0;
         }
 
         /// <summary>

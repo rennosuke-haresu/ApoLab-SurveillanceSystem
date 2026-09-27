@@ -76,6 +76,8 @@ namespace ApoLab.SurveillanceSystem
             if (renderTexture == null)
             {
                 LogError($"CameraController (ID: {cameraId}): renderTextureが設定されていません");
+                // 出力先がないままカメラが有効だとプレイヤーの画面に直接描画されるため止める
+                targetCamera.enabled = false;
                 return;
             }
 
@@ -86,7 +88,7 @@ namespace ApoLab.SurveillanceSystem
 
             // デフォルトは非アクティブ状態
             _viewerCount = 0;
-            _SetCameraActive(false);
+            SetCameraActive(false);
 
             if (enableDebugLog)
             {
@@ -100,7 +102,7 @@ namespace ApoLab.SurveillanceSystem
         public void _AddViewer()
         {
             _viewerCount++;
-            _SetCameraActive(true);
+            SetCameraActive(true);
         }
 
         /// <summary>
@@ -113,7 +115,7 @@ namespace ApoLab.SurveillanceSystem
             if (_viewerCount <= 0)
             {
                 _viewerCount = 0;
-                _SetCameraActive(false);
+                SetCameraActive(false);
             }
         }
 
@@ -123,15 +125,14 @@ namespace ApoLab.SurveillanceSystem
         public void _ResetViewers()
         {
             _viewerCount = 0;
-            _SetCameraActive(false);
+            SetCameraActive(false);
         }
 
         /// <summary>
-        /// カメラのアクティブ状態を直接設定
-        /// ※ 表示カウントを経由しないため、通常は _AddViewer / _RemoveViewer を使用してください
+        /// カメラのアクティブ状態を設定（外部からは _AddViewer / _RemoveViewer を経由すること）
         /// </summary>
         /// <param name="active">アクティブ状態</param>
-        public void _SetCameraActive(bool active)
+        private void SetCameraActive(bool active)
         {
             if (!_isInitialized)
             {
@@ -149,30 +150,6 @@ namespace ApoLab.SurveillanceSystem
             {
                 LogDebug($"Camera {cameraId} ({cameraName}) set to {(active ? "Active" : "Inactive")}");
             }
-        }
-
-        /// <summary>
-        /// カメラのアクティブ状態を切り替え（表示カウントを経由しません）
-        /// </summary>
-        public void _ToggleCameraActive()
-        {
-            _SetCameraActive(!_isActive);
-        }
-
-        /// <summary>
-        /// カメラをアクティブに設定（表示カウントを経由しません）
-        /// </summary>
-        public void _ActivateCamera()
-        {
-            _SetCameraActive(true);
-        }
-
-        /// <summary>
-        /// カメラを非アクティブに設定（表示カウントを経由しません）
-        /// </summary>
-        public void _DeactivateCamera()
-        {
-            _SetCameraActive(false);
         }
 
         /// <summary>
