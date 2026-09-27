@@ -151,6 +151,7 @@ namespace ApoLab.SurveillanceSystem
             }
 
             int validMonitors = 0;
+            int pendingMonitors = 0;
             for (int i = 0; i < allMonitors.Length; i++)
             {
                 if (allMonitors[i] == null)
@@ -162,13 +163,35 @@ namespace ApoLab.SurveillanceSystem
                     continue;
                 }
 
-                // モニターにカメラコントローラー配列を設定
-                if (allCameras != null && allCameras.Length > 0)
+                // 個別にカメラを指定していないモニターだけ全カメラを割り当てる
+                MonitorDisplay monitor = allMonitors[i];
+                if (!monitor.HasAssignedCameras())
                 {
-                    allMonitors[i].cameraControllers = allCameras;
+                    if (allCameras != null && allCameras.Length > 0)
+                    {
+                        monitor.cameraControllers = allCameras;
+                    }
+                }
+                else if (enableDebugLog)
+                {
+                    WarnUnregisteredCameras(i, monitor.cameraControllers);
                 }
 
-                if (allMonitors[i].IsValidConfiguration())
+                // 非アクティブなモニターは、初めてアクティブになったときに自身の Start で初期化される
+                if (!monitor.gameObject.activeInHierarchy)
+                {
+                    if (monitor.HasAssignedCameras())
+                    {
+                        pendingMonitors++;
+                    }
+                    else
+                    {
+                        LogError($"Monitor display [{i}] has no cameras");
+                    }
+                    continue;
+                }
+
+                if (monitor.IsValidConfiguration())
                 {
                     validMonitors++;
                 }
@@ -180,9 +203,40 @@ namespace ApoLab.SurveillanceSystem
 
             if (enableDebugLog)
             {
-                LogDebug($"Monitor initialization: {validMonitors}/{allMonitors.Length} monitors valid");
+                LogDebug($"Monitor initialization: {validMonitors}/{allMonitors.Length} monitors valid, {pendingMonitors} inactive");
             }
-            return validMonitors > 0;
+            return validMonitors + pendingMonitors > 0;
+        }
+
+        /// <summary>
+        /// モニターに個別指定されたカメラのうち All Cameras に含まれないものを警告する
+        /// （映像は映るが、マネージャーの検証対象から外れるため）
+        /// </summary>
+        private void WarnUnregisteredCameras(int monitorIndex, CameraController[] monitorCameras)
+        {
+            for (int c = 0; c < monitorCameras.Length; c++)
+            {
+                CameraController cam = monitorCameras[c];
+                if (cam == null) continue;
+
+                bool registered = false;
+                if (allCameras != null)
+                {
+                    for (int a = 0; a < allCameras.Length; a++)
+                    {
+                        if (allCameras[a] == cam)
+                        {
+                            registered = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!registered)
+                {
+                    LogWarning($"Monitor display [{monitorIndex}]: camera [{c}] is not registered in All Cameras");
+                }
+            }
         }
 
         /// <summary>
@@ -210,6 +264,13 @@ namespace ApoLab.SurveillanceSystem
                     }
                     continue;
                 }
+
+                // 非アクティブなセレクターは、初めてアクティブになったときに自身の Start で初期化される
+                if (!allSelectors[i].gameObject.activeInHierarchy) continue;
+
+                // 対象モニターが非アクティブな間は、そのモニターと同じく保留として扱う
+                MonitorDisplay selectorTarget = allSelectors[i].targetMonitor;
+                if (selectorTarget != null && !selectorTarget.gameObject.activeInHierarchy) continue;
 
                 if (allSelectors[i].IsValidConfiguration())
                 {
@@ -250,13 +311,11 @@ namespace ApoLab.SurveillanceSystem
         /// </summary>
         private void SetInitialState()
         {
-            // 全モニターをOFF状態に設定
+            // 全モニターをOFF状態に設定（各モニターが表示登録を解除するため、カメラの表示カウントも正しく減る）
+            // ※ _DeactivateAllCameras は使わない。マネージャー未登録のモニターが見ているカメラまで止めてしまうため
             _TurnOffAllMonitors();
 
-            // 全カメラの表示カウントをリセットして非アクティブに設定
-            _DeactivateAllCameras();
-
-            LogDebug("System set to initial state (all cameras and monitors off)");
+            LogDebug("System set to initial state (all monitors off)");
         }
 
         /// <summary>
@@ -277,6 +336,7 @@ namespace ApoLab.SurveillanceSystem
 
         /// <summary>
         /// 全カメラの表示カウントをリセットし、非アクティブに設定
+        /// ※ マネージャーに登録されていないモニターが表示中のカメラも止まる（そのモニターの映像は最後のフレームで固まる）
         /// </summary>
         public void _DeactivateAllCameras()
         {
@@ -333,9 +393,8 @@ namespace ApoLab.SurveillanceSystem
         {
             LogDebug("Resetting surveillance system...");
 
-            // 全コンポーネントを初期状態に戻す
+            // 再初期化が途中で失敗しても表示が残らないよう、先に登録モニターをOFFにする
             _TurnOffAllMonitors();
-            _DeactivateAllCameras();
 
             // システム再初期化
             _isInitialized = false;

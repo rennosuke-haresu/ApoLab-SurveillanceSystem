@@ -23,7 +23,7 @@ namespace ApoLab.SurveillanceSystem
         public Renderer displayRenderer;
 
         [Header("カメラシステム連携")]
-        [Tooltip("制御対象のカメラコントローラー配列")]
+        [Tooltip("このモニターで切り替えるカメラ。空ならマネージャーの All Cameras を使用。指定するとこのモニターではそのカメラだけを切り替える")]
         public CameraController[] cameraControllers = new CameraController[0];
 
         [Tooltip("監視システムマネージャー（自動設定）")]
@@ -336,7 +336,22 @@ namespace ApoLab.SurveillanceSystem
         /// <returns>表示先とカメラが1台以上設定されている場合true</returns>
         public bool HasCameras()
         {
-            return displayRenderer != null && cameraControllers != null && cameraControllers.Length > 0;
+            return displayRenderer != null && HasAssignedCameras();
+        }
+
+        /// <summary>
+        /// カメラ一覧に null でない要素が1つ以上あるか（サイズだけ設定して中身が空の一覧は false）
+        /// </summary>
+        /// <returns>カメラが1台以上登録されている場合true</returns>
+        public bool HasAssignedCameras()
+        {
+            if (cameraControllers == null) return false;
+
+            for (int i = 0; i < cameraControllers.Length; i++)
+            {
+                if (cameraControllers[i] != null) return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -345,7 +360,7 @@ namespace ApoLab.SurveillanceSystem
         /// <returns>設定が有効な場合true</returns>
         public bool IsValidConfiguration()
         {
-            return _isInitialized && displayRenderer != null && cameraControllers != null && cameraControllers.Length > 0;
+            return _isInitialized && displayRenderer != null && HasAssignedCameras();
         }
 
         #region Debug Logging

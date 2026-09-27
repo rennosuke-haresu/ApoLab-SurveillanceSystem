@@ -9,6 +9,7 @@ VRChat ワールド向け監視カメラシステムです。複数のカメラ�
 ## 機能
 
 - 最大8台のカメラをモニターに切り替え表示
+- モニターごとに切り替えるカメラを割り当て可能（例：受付は入口カメラだけ）
 - [◀][▶] ボタンでカメラを順送り・逆送り
 - [OFF] ボタンでモニターを黒画面に切り替え
 - RenderTexture による軽量なリアルタイム映像表示
@@ -64,6 +65,7 @@ Assets/ApoLab/SurveillanceSystem/
 2. **SurveillanceCamera_Template** を使用するカメラ分複製・配置
 3. **SurveillanceMonitor_Template** をモニター分複製・配置
 4. SurveillanceManager の Inspector でカメラとモニターを割り当て
+5. （任意）モニターごとに見せるカメラを絞る場合は、各モニターの **MonitorDisplay → Camera Controllers** にカメラを登録
 
 ---
 
