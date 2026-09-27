@@ -45,3 +45,7 @@ AGENTS.md
 # UdonSharp compiled programs (regenerated on compile)
 Assets/SerializedUdonPrograms/
 Assets/SerializedUdonPrograms.meta
+
+# 有料版（モデル付き）は非公開リポジトリで管理する
+Assets/ApoLab/SurveillanceSystem_CameraModel/
+Assets/ApoLab/SurveillanceSystem_CameraModel.meta
