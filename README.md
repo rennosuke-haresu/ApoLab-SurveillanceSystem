@@ -25,7 +25,7 @@ VRChat ワールド向け監視カメラシステムです。複数のカメラ�
 | 項目 | バージョン |
 |---|---|
 | Unity | 2022.3.22f1 LTS |
-| VRChat World SDK | 3.8.2 以降（3.10.4 で動作確認）|
+| VRChat World SDK | 3.8.2 以降（3.10.5 で動作確認）|
 | UdonSharp | SDK 同梱 |
 | TextMeshPro | Unity Registry 版 |
 
@@ -73,6 +73,7 @@ Assets/ApoLab/SurveillanceSystem/
 
 | バージョン | 日付 | 内容 |
 |---|---|---|
+| v1.2.0 | 2026-09-27 | モニターごとに切り替えるカメラを割り当て可能に、RenderTexture 未設定のカメラが画面に映り込む問題を修正、モニターの非アクティブ化・開始時非アクティブに対応、**CameraController の `_SetCameraActive` / `_ToggleCameraActive` / `_ActivateCamera` / `_DeactivateCamera` と MonitorDisplay の `surveillanceManager` フィールドを削除**（カメラの ON/OFF はモニター経由で行ってください） |
 | v1.1.0 | 2026-07-27 | RenderTexture の深度バッファ修正、複数モニターで同じカメラを表示できるよう修正、無効なカメラの読み飛ばし、カメラ既定値の最適化 |
 | v1.0.2 | 2026-05-16 | モニターシェーダー変更・OFF 時に黒画面を表示するよう修正 |
 | v1.0.1 | 2026-05-14 | カメラ設定修正・モニターマテリアル修正 |

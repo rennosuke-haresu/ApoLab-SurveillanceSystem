@@ -75,9 +75,6 @@ namespace ApoLab.SurveillanceSystem
                 return;
             }
 
-            // システム間の関連付け
-            LinkSystemComponents();
-
             // 初期状態設定
             SetInitialState();
 
@@ -96,14 +93,16 @@ namespace ApoLab.SurveillanceSystem
 
         /// <summary>
         /// カメラコントローラーの初期化
+        /// モニターが個別にカメラを持てるため All Cameras は空でもよく、検証結果にかかわらず常に true を返します
+        /// （設定不備は個別にログへ出力され、システムとしての成否はモニター側の判定で決まります）
         /// </summary>
-        /// <returns>成功した場合true</returns>
+        /// <returns>常にtrue</returns>
         private bool InitializeCameras()
         {
             if (allCameras == null || allCameras.Length == 0)
             {
                 LogWarning("No cameras configured in the system");
-                return true; // カメラがなくてもシステムは動作可能
+                return true;
             }
 
             int validCameras = 0;
@@ -135,7 +134,13 @@ namespace ApoLab.SurveillanceSystem
             {
                 LogDebug($"Camera initialization: {validCameras}/{allCameras.Length} cameras valid");
             }
-            return validCameras > 0;
+
+            // 初期化自体は続けるが、登録したカメラが1台も使えない設定ミスは目立たせる
+            if (validCameras == 0)
+            {
+                LogError("No valid cameras in All Cameras (check Target Camera / Render Texture)");
+            }
+            return true;
         }
 
         /// <summary>
@@ -180,13 +185,13 @@ namespace ApoLab.SurveillanceSystem
                 // 非アクティブなモニターは、初めてアクティブになったときに自身の Start で初期化される
                 if (!monitor.gameObject.activeInHierarchy)
                 {
-                    if (monitor.HasAssignedCameras())
+                    if (monitor.HasCameras())
                     {
                         pendingMonitors++;
                     }
                     else
                     {
-                        LogError($"Monitor display [{i}] has no cameras");
+                        LogError($"Monitor display [{i}] has no cameras or display renderer");
                     }
                     continue;
                 }
@@ -290,23 +295,6 @@ namespace ApoLab.SurveillanceSystem
         }
 
         /// <summary>
-        /// システムコンポーネント間の関連付け
-        /// </summary>
-        private void LinkSystemComponents()
-        {
-            // モニターにマネージャーの参照を設定
-            if (allMonitors == null) return;
-
-            for (int i = 0; i < allMonitors.Length; i++)
-            {
-                if (allMonitors[i] != null)
-                {
-                    allMonitors[i].surveillanceManager = this;
-                }
-            }
-        }
-
-        /// <summary>
         /// システムの初期状態を設定
         /// </summary>
         private void SetInitialState()
@@ -404,31 +392,31 @@ namespace ApoLab.SurveillanceSystem
         /// <summary>
         /// 指定したカメラの情報を取得
         /// </summary>
-        /// <param name="cameraId">カメラID</param>
+        /// <param name="cameraIndex">All Cameras 内の番号（カメラの Camera Id ではない）</param>
         /// <returns>カメラ情報文字列</returns>
-        public string GetCameraInfo(int cameraId)
+        public string GetCameraInfo(int cameraIndex)
         {
-            if (allCameras == null || cameraId < 0 || cameraId >= allCameras.Length || allCameras[cameraId] == null)
+            if (allCameras == null || cameraIndex < 0 || cameraIndex >= allCameras.Length || allCameras[cameraIndex] == null)
             {
-                return $"Camera {cameraId}: Not found";
+                return $"Camera [{cameraIndex}]: Not found";
             }
 
-            return allCameras[cameraId].GetStatusInfo();
+            return allCameras[cameraIndex].GetStatusInfo();
         }
 
         /// <summary>
         /// 指定したモニターの情報を取得
         /// </summary>
-        /// <param name="monitorId">モニターID</param>
+        /// <param name="monitorIndex">All Monitors 内の番号（モニターの Monitor Id ではない）</param>
         /// <returns>モニター情報文字列</returns>
-        public string GetMonitorInfo(int monitorId)
+        public string GetMonitorInfo(int monitorIndex)
         {
-            if (allMonitors == null || monitorId < 0 || monitorId >= allMonitors.Length || allMonitors[monitorId] == null)
+            if (allMonitors == null || monitorIndex < 0 || monitorIndex >= allMonitors.Length || allMonitors[monitorIndex] == null)
             {
-                return $"Monitor {monitorId}: Not found";
+                return $"Monitor [{monitorIndex}]: Not found";
             }
 
-            return allMonitors[monitorId].GetStatusInfo();
+            return allMonitors[monitorIndex].GetStatusInfo();
         }
 
         #region Debug Logging

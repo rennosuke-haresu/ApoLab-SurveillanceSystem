@@ -26,9 +26,6 @@ namespace ApoLab.SurveillanceSystem
         [Tooltip("このモニターで切り替えるカメラ。空ならマネージャーの All Cameras を使用。指定するとこのモニターではそのカメラだけを切り替える")]
         public CameraController[] cameraControllers = new CameraController[0];
 
-        [Tooltip("監視システムマネージャー（自動設定）")]
-        public SurveillanceManager surveillanceManager;
-
         [Header("UI要素")]
         [Tooltip("カメラ名を表示するTextMeshPro")]
         public TextMeshProUGUI cameraNameText;
@@ -56,9 +53,13 @@ namespace ApoLab.SurveillanceSystem
         public bool IsDisplayActive => _currentCameraIndex >= 0;
 
         /// <summary>
-        /// モニター名を取得
+        /// モニター名を取得（未設定なら "Monitor {ID}"）
         /// </summary>
-        public string GetMonitorName() => monitorName;
+        public string GetMonitorName()
+        {
+            if (monitorName == null || monitorName == "") return $"Monitor {monitorId}";
+            return monitorName;
+        }
 
         /// <summary>
         /// モニターIDを取得
@@ -95,7 +96,7 @@ namespace ApoLab.SurveillanceSystem
 
             if (enableDebugLog)
             {
-                LogDebug($"MonitorDisplay initialized - ID: {monitorId}, Name: {monitorName}, Cameras: {cameraControllers.Length}");
+                LogDebug($"MonitorDisplay initialized - ID: {monitorId}, Name: {GetMonitorName()}, Cameras: {cameraControllers.Length}");
             }
         }
 
@@ -327,7 +328,7 @@ namespace ApoLab.SurveillanceSystem
                 ? cameraControllers[_currentCameraIndex].GetCameraName()
                 : "OFF";
 
-            return $"Monitor {monitorId}: {monitorName} - {cameraName}";
+            return $"Monitor {monitorId}: {GetMonitorName()} - {cameraName}";
         }
 
         /// <summary>
@@ -385,17 +386,6 @@ namespace ApoLab.SurveillanceSystem
         private void LogError(string message)
         {
             Debug.LogError($"[MonitorDisplay] {message}");
-        }
-        #endregion
-
-        #region Editor Support
-        private void OnValidate()
-        {
-            // Editorでの設定検証
-            if (monitorName == "" || monitorName == null)
-            {
-                monitorName = $"Monitor {monitorId}";
-            }
         }
         #endregion
     }

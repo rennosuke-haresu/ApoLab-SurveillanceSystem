@@ -10,6 +10,8 @@ namespace ApoLab.SurveillanceSystem
     /// [◀][▶][OFF]の3ボタンでカメラを簡単に切り替えます
     /// ※ カメラ名の表示は MonitorDisplay 側（Camera Name Text）が担当します
     /// </summary>
+    // SyncMode None の UdonBehaviour にはネットワークイベントが届かないため、ボタン用メソッド（On*ButtonClick）を
+    // `_` 接頭辞なしで公開しても他プレイヤーからは呼べない。同期モードを変える場合は接頭辞と NetworkCallable の扱いを見直すこと
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class CameraSelector : UdonSharpBehaviour
     {
@@ -130,15 +132,13 @@ namespace ApoLab.SurveillanceSystem
         /// </summary>
         private void SaveOriginalButtonColors()
         {
-            if (enableButtonFeedback)
-            {
-                if (previousButtonImage != null)
-                    _originalPrevColor = previousButtonImage.color;
-                if (nextButtonImage != null)
-                    _originalNextColor = nextButtonImage.color;
-                if (offButtonImage != null)
-                    _originalOffColor = offButtonImage.color;
-            }
+            // 実行中に enableButtonFeedback をオンにしても色を戻せるよう、設定にかかわらず保存する
+            if (previousButtonImage != null)
+                _originalPrevColor = previousButtonImage.color;
+            if (nextButtonImage != null)
+                _originalNextColor = nextButtonImage.color;
+            if (offButtonImage != null)
+                _originalOffColor = offButtonImage.color;
         }
 
         /// <summary>
@@ -257,21 +257,24 @@ namespace ApoLab.SurveillanceSystem
         {
             if (!enableButtonFeedback || button == null) return;
 
+            // 0 以下だと色が戻る前に次の押下と重なるため下限を設ける
+            float duration = Mathf.Max(feedbackDuration, 0.05f);
+
             // 色を変更（Imageコンポーネントを直接参照）
             if (button == previousButton && previousButtonImage != null)
             {
                 previousButtonImage.color = feedbackColor;
-                SendCustomEventDelayedSeconds(nameof(_RestorePreviousButtonColor), feedbackDuration);
+                SendCustomEventDelayedSeconds(nameof(_RestorePreviousButtonColor), duration);
             }
             else if (button == nextButton && nextButtonImage != null)
             {
                 nextButtonImage.color = feedbackColor;
-                SendCustomEventDelayedSeconds(nameof(_RestoreNextButtonColor), feedbackDuration);
+                SendCustomEventDelayedSeconds(nameof(_RestoreNextButtonColor), duration);
             }
             else if (button == offButton && offButtonImage != null)
             {
                 offButtonImage.color = feedbackColor;
-                SendCustomEventDelayedSeconds(nameof(_RestoreOffButtonColor), feedbackDuration);
+                SendCustomEventDelayedSeconds(nameof(_RestoreOffButtonColor), duration);
             }
         }
 
@@ -346,17 +349,6 @@ namespace ApoLab.SurveillanceSystem
         private void LogError(string message)
         {
             Debug.LogError($"[CameraSelector] {message}");
-        }
-        #endregion
-
-        #region Editor Support
-        private void OnValidate()
-        {
-            // Editorでの設定検証
-            if (feedbackDuration <= 0)
-            {
-                feedbackDuration = 0.2f;
-            }
         }
         #endregion
     }

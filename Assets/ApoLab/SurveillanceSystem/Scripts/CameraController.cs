@@ -47,9 +47,13 @@ namespace ApoLab.SurveillanceSystem
         public int ViewerCount => _viewerCount;
 
         /// <summary>
-        /// カメラ名を取得
+        /// カメラ名を取得（未設定なら "Camera {ID}"）
         /// </summary>
-        public string GetCameraName() => cameraName;
+        public string GetCameraName()
+        {
+            if (cameraName == null || cameraName == "") return $"Camera {cameraId}";
+            return cameraName;
+        }
 
         /// <summary>
         /// カメラIDを取得
@@ -92,7 +96,7 @@ namespace ApoLab.SurveillanceSystem
 
             if (enableDebugLog)
             {
-                LogDebug($"CameraController initialized - ID: {cameraId}, Name: {cameraName}");
+                LogDebug($"CameraController initialized - ID: {cameraId}, Name: {GetCameraName()}");
             }
         }
 
@@ -148,7 +152,7 @@ namespace ApoLab.SurveillanceSystem
 
             if (enableDebugLog)
             {
-                LogDebug($"Camera {cameraId} ({cameraName}) set to {(active ? "Active" : "Inactive")}");
+                LogDebug($"Camera {cameraId} ({GetCameraName()}) set to {(active ? "Active" : "Inactive")}");
             }
         }
 
@@ -158,7 +162,7 @@ namespace ApoLab.SurveillanceSystem
         /// <returns>状態情報文字列</returns>
         public string GetStatusInfo()
         {
-            return $"Camera {cameraId}: {cameraName} - {(_isActive ? "Active" : "Inactive")}";
+            return $"Camera {cameraId}: {GetCameraName()} - {(_isActive ? "Active" : "Inactive")}";
         }
 
         /// <summary>
@@ -203,17 +207,6 @@ namespace ApoLab.SurveillanceSystem
         private void LogError(string message)
         {
             Debug.LogError($"[CameraController] {message}");
-        }
-        #endregion
-
-        #region Editor Support
-        private void OnValidate()
-        {
-            // Editorでの設定検証
-            if (cameraName == "" || cameraName == null)
-            {
-                cameraName = $"Camera {cameraId}";
-            }
         }
         #endregion
     }
