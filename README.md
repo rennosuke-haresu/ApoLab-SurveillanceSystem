@@ -12,6 +12,7 @@ VRChat ワールド向け監視カメラシステムです。複数のカメラ�
 - モニターごとに切り替えるカメラを割り当て可能（例：受付は入口カメラだけ）
 - [◀][▶] ボタンでカメラを順送り・逆送り
 - [OFF] ボタンでモニターを黒画面に切り替え
+- 立体ボタン（MonitorButton）でも切り替え可能（自作モデルのボタンなどに）
 - RenderTexture による軽量なリアルタイム映像表示
 - 複数モニターで同じカメラを表示可能
 - UdonSharp 製のため改変・拡張が容易
@@ -54,7 +55,8 @@ Assets/ApoLab/SurveillanceSystem/
     ├── SurveillanceManager.cs   # カメラ・モニターの統括管理
     ├── CameraController.cs      # 個別カメラの制御
     ├── MonitorDisplay.cs        # RenderTexture のモニター表示
-    └── CameraSelector.cs        # カメラ切り替え UI
+    ├── CameraSelector.cs        # カメラ切り替え UI
+    └── MonitorButton.cs         # 立体ボタンでの切り替え
 ```
 
 ---
