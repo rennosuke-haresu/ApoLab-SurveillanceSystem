@@ -206,11 +206,35 @@ namespace ApoLab.SurveillanceSystem
                 }
             }
 
+            WarnDuplicateMonitorIds();
+
             if (enableDebugLog)
             {
                 LogDebug($"Monitor initialization: {validMonitors}/{allMonitors.Length} monitors valid, {pendingMonitors} inactive");
             }
             return validMonitors + pendingMonitors > 0;
+        }
+
+        /// <summary>
+        /// Monitor Id の重複を警告する（プレハブの既定値が 0 のため、複製したまま使うと重なりやすい）
+        /// 動作には影響しないが、Monitor Name が空のときの表示名「Monitor {Id}」が同じになる
+        /// </summary>
+        private void WarnDuplicateMonitorIds()
+        {
+            for (int i = 0; i < allMonitors.Length; i++)
+            {
+                if (allMonitors[i] == null) continue;
+                int id = allMonitors[i].GetMonitorId();
+                for (int j = 0; j < i; j++)
+                {
+                    if (allMonitors[j] != null && allMonitors[j].GetMonitorId() == id)
+                    {
+                        // 設定ミスに気づけるよう、デバッグログの設定にかかわらず出す（重複があるときだけ、初期化時に1回）
+                        Debug.LogWarning($"[SurveillanceManager] Monitor display [{j}] and [{i}] share Monitor Id {id} (set a unique Monitor Id per monitor)");
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>

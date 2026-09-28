@@ -45,16 +45,28 @@ namespace ApoLab.SurveillanceSystem
         // 内部状態管理
         private Vector3 _restPosition;
         private int _pendingReleases = 0;
+        private bool _initialized = false;
 
         void Start()
         {
             if (pressTarget == null) pressTarget = transform;
             _restPosition = pressTarget.localPosition;
+            _initialized = true;
 
             if (targetMonitor == null)
             {
                 LogError($"{gameObject.name}: targetMonitorが設定されていません");
+                // 押しても何も起きないボタンに Use の表示を出さない
+                DisableInteractive = true;
             }
+        }
+
+        void OnDisable()
+        {
+            // 押し込み中に非アクティブになると戻す遅延イベントが届かないため、ここで戻す
+            if (!_initialized) return;
+            _pendingReleases = 0;
+            pressTarget.localPosition = _restPosition;
         }
 
         public override void Interact()
@@ -98,6 +110,7 @@ namespace ApoLab.SurveillanceSystem
         /// </summary>
         public void _Release()
         {
+            // OnDisable で戻したあとに残りのイベントが届いた場合も、ここで 0 に丸めて戻す
             _pendingReleases--;
             if (_pendingReleases > 0) return;
             _pendingReleases = 0;
