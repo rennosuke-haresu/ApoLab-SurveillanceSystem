@@ -34,6 +34,16 @@ namespace ApoLab.SurveillanceSystem
         [Tooltip("OFF時に表示するテクスチャ（黒画像を設定）")]
         public Texture offTexture;
 
+        [Header("状態表示（任意）")]
+        [Tooltip("映像の有無で色を変えるランプ（未設定なら何もしない）")]
+        public Renderer statusLight;
+
+        [Tooltip("映しているときのマテリアル")]
+        public Material statusOnMaterial;
+
+        [Tooltip("OFF のときのマテリアル")]
+        public Material statusOffMaterial;
+
         [Header("デバッグ設定")]
         [Tooltip("デバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
@@ -172,6 +182,7 @@ namespace ApoLab.SurveillanceSystem
             targetCamera._AddViewer();
             displayRenderer.material.mainTexture = targetCamera.renderTexture;
             _currentCameraIndex = cameraIndex;
+            UpdateStatusLight();
 
             // UI更新
             UpdateCameraNameDisplay();
@@ -195,6 +206,7 @@ namespace ApoLab.SurveillanceSystem
 
             displayRenderer.material.mainTexture = offTexture;
             _currentCameraIndex = -1;
+            UpdateStatusLight();
 
             // UI更新（初期化完了後のみ）
             if (_isInitialized)
@@ -217,6 +229,16 @@ namespace ApoLab.SurveillanceSystem
             {
                 _SetDisplayOff();
             }
+        }
+
+        /// <summary>
+        /// 状態表示ランプを現在の状態に合わせる（Renderer ごとの差し替えなので他のモニターに波及しない）
+        /// </summary>
+        private void UpdateStatusLight()
+        {
+            if (statusLight == null) return;
+            Material m = _currentCameraIndex >= 0 ? statusOnMaterial : statusOffMaterial;
+            if (m != null) statusLight.sharedMaterial = m;
         }
 
         /// <summary>
