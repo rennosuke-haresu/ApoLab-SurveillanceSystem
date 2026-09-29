@@ -78,6 +78,7 @@ Assets/ApoLab/SurveillanceSystem/
 
 | Version | Date | Changes |
 |---|---|---|
+| v1.4.0 | 2026-09-29 | Added **Auto Localize** to MonitorButton: 3D button labels follow the player's language (EN / JA / KO / ZH, off by default); English Inspector headers with bilingual tooltips; English logs; renamed the guide to `SetupGuide_JA.md` and added an English version; added this English README; fixed a 3D button staying pushed in when deactivated mid-press; buttons without a Target Monitor no longer show Use; duplicate Monitor Ids are warned at startup |
 | v1.3.0 | 2026-09-28 | Added 3D buttons (MonitorButton); added an optional status light setting to MonitorDisplay |
 | v1.2.0 | 2026-09-27 | Cameras can be assigned per monitor; fixed cameras without a RenderTexture rendering to the screen; monitors can be deactivated or start inactive; **removed CameraController's `_SetCameraActive` / `_ToggleCameraActive` / `_ActivateCamera` / `_DeactivateCamera` and MonitorDisplay's `surveillanceManager` field** (turn cameras on and off through monitors) |
 | v1.1.0 | 2026-07-27 | Fixed the RenderTexture depth buffer; fixed showing the same camera on several monitors; skip invalid cameras; tuned camera defaults |

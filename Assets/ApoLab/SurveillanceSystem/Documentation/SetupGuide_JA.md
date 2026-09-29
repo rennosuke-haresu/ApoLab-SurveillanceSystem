@@ -2,7 +2,7 @@
 
 [English](SetupGuide_EN.md) | 日本語
 
-**バージョン**: 1.2.0  
+**バージョン**: 1.4.0  
 **対応 VRChat World SDK**: 3.8.2 以降（3.10.5 で動作確認）  
 **対応 Unity**: 2022.3.22f1 LTS 以降
 
@@ -262,6 +262,7 @@ Unity の通常のボタン設定とは違います。以下の手順で設定�
 
 | バージョン | 日付 | 内容 |
 |---|---|---|
+| 1.4.0 | 2026-09-29 | 立体ボタンの表示をプレイヤーの言語に合わせて切り替える **Auto Localize** を MonitorButton に追加（英・日・韓・中、既定は OFF）、Inspector の見出しを英語・説明を日英併記に、ログを英語に、ガイドを `SetupGuide_JA.md` に改名し英語版 `SetupGuide_EN.md` を追加、立体ボタンが押し込まれたまま非アクティブになると戻らない問題を修正、Target Monitor 未設定のボタンに Use を表示しないよう修正、Monitor Id の重複を起動時に警告 |
 | 1.3.0 | 2026-09-28 | 立体ボタン（MonitorButton）を追加、MonitorDisplay に状態表示ランプの設定（任意）を追加 |
 | 1.2.0 | 2026-09-27 | モニターごとに切り替えるカメラを割り当て可能に、RenderTexture 未設定のカメラが画面に映り込む問題を修正、モニターの非アクティブ化・開始時非アクティブに対応、**CameraController の `_SetCameraActive` / `_ToggleCameraActive` / `_ActivateCamera` / `_DeactivateCamera` と MonitorDisplay の `surveillanceManager` フィールドを削除**（カメラの ON/OFF はモニター経由で行ってください） |
 | 1.1.0 | 2026-07-27 | RenderTexture の深度バッファ修正、複数モニターで同じカメラを表示できるよう修正、無効なカメラの読み飛ばし、カメラ既定値の最適化 |
