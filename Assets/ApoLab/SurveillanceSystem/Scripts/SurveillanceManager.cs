@@ -10,25 +10,25 @@ namespace ApoLab.SurveillanceSystem
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class SurveillanceManager : UdonSharpBehaviour
     {
-        [Header("システム基本設定")]
-        [Tooltip("自動初期化を有効にする")]
+        [Header("System")]
+        [Tooltip("Initialize automatically on Start\n自動初期化を有効にする")]
         public bool autoInitialize = true;
 
-        [Header("コンポーネント管理")]
-        [Tooltip("システム内の全カメラコントローラー")]
+        [Header("Components")]
+        [Tooltip("All camera controllers in the system\nシステム内の全カメラコントローラー")]
         public CameraController[] allCameras = new CameraController[0];
 
-        [Tooltip("システム内の全モニターディスプレイ")]
+        [Tooltip("All monitor displays in the system\nシステム内の全モニターディスプレイ")]
         public MonitorDisplay[] allMonitors = new MonitorDisplay[0];
 
-        [Tooltip("システム内の全カメラセレクター")]
+        [Tooltip("All camera selectors in the system\nシステム内の全カメラセレクター")]
         public CameraSelector[] allSelectors = new CameraSelector[0];
 
-        [Header("デバッグ設定")]
-        [Tooltip("デバッグログを出力するかどうか")]
+        [Header("Debug")]
+        [Tooltip("Output debug logs\nデバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
 
-        [Tooltip("詳細なシステム情報を表示")]
+        [Tooltip("Show detailed system info\n詳細なシステム情報を表示")]
         public bool showDetailedStatus = false;
 
         // 内部状態管理

@@ -12,40 +12,40 @@ namespace ApoLab.SurveillanceSystem
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class MonitorDisplay : UdonSharpBehaviour
     {
-        [Header("モニター基本設定")]
-        [Tooltip("モニター識別ID (0から連番で設定)")]
+        [Header("Monitor")]
+        [Tooltip("Monitor ID (sequential from 0)\nモニター識別ID (0から連番で設定)")]
         public int monitorId = 0;
 
-        [Tooltip("モニター表示名")]
+        [Tooltip("Monitor name\nモニター表示名")]
         public string monitorName = "Monitor 1";
 
-        [Tooltip("映像を表示するRenderer（Quad使用）")]
+        [Tooltip("Renderer that shows the video (Quad)\n映像を表示するRenderer（Quad使用）")]
         public Renderer displayRenderer;
 
-        [Header("カメラシステム連携")]
-        [Tooltip("このモニターで切り替えるカメラ。空ならマネージャーの All Cameras を使用。指定するとこのモニターではそのカメラだけを切り替える")]
+        [Header("Cameras")]
+        [Tooltip("Cameras this monitor switches between. Empty = the manager's All Cameras\nこのモニターで切り替えるカメラ。空ならマネージャーの All Cameras を使用。指定するとこのモニターではそのカメラだけを切り替える")]
         public CameraController[] cameraControllers = new CameraController[0];
 
-        [Header("UI要素")]
-        [Tooltip("カメラ名を表示するTextMeshPro")]
+        [Header("UI")]
+        [Tooltip("TextMeshPro that shows the camera name\nカメラ名を表示するTextMeshPro")]
         public TextMeshProUGUI cameraNameText;
 
-        [Header("表示設定")]
-        [Tooltip("OFF時に表示するテクスチャ（黒画像を設定）")]
+        [Header("Display")]
+        [Tooltip("Texture shown when off (e.g. black)\nOFF時に表示するテクスチャ（黒画像を設定）")]
         public Texture offTexture;
 
-        [Header("状態表示（任意）")]
-        [Tooltip("映像の有無で色を変えるランプ（未設定なら何もしない）")]
+        [Header("Status Light (Optional)")]
+        [Tooltip("Renderer whose material changes with the video state (does nothing if empty)\n映像の有無で色を変えるランプ（未設定なら何もしない）")]
         public Renderer statusLight;
 
-        [Tooltip("映しているときのマテリアル")]
+        [Tooltip("Material while showing video\n映しているときのマテリアル")]
         public Material statusOnMaterial;
 
-        [Tooltip("OFF のときのマテリアル")]
+        [Tooltip("Material while off\nOFF のときのマテリアル")]
         public Material statusOffMaterial;
 
-        [Header("デバッグ設定")]
-        [Tooltip("デバッグログを出力するかどうか")]
+        [Header("Debug")]
+        [Tooltip("Output debug logs\nデバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
 
         // 内部状態管理
@@ -89,7 +89,7 @@ namespace ApoLab.SurveillanceSystem
             // 必須コンポーネントのチェック
             if (displayRenderer == null)
             {
-                LogError($"MonitorDisplay (ID: {monitorId}): displayRendererが設定されていません");
+                LogError($"MonitorDisplay (ID: {monitorId}): displayRenderer is not set");
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (enableDebugLog)
                 {
-                    LogWarning($"MonitorDisplay (ID: {monitorId}): カメラコントローラーが設定されていません");
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): no camera controllers are set");
                 }
                 return;
             }
@@ -130,7 +130,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (cameraControllers[i] == null && enableDebugLog)
                 {
-                    LogWarning($"MonitorDisplay (ID: {monitorId}): カメラコントローラー[{i}]がnullです");
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): camera controller [{i}] is null");
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (enableDebugLog)
                 {
-                    LogWarning($"MonitorDisplay (ID: {monitorId}): 無効なカメラインデックス {cameraIndex}");
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): invalid camera index {cameraIndex}");
                 }
                 return;
             }
@@ -171,7 +171,7 @@ namespace ApoLab.SurveillanceSystem
             // カメラの設定確認
             if (!targetCamera.IsValidConfiguration())
             {
-                LogError($"MonitorDisplay (ID: {monitorId}): カメラ {cameraIndex} の設定が無効です");
+                LogError($"MonitorDisplay (ID: {monitorId}): camera {cameraIndex} is not configured correctly");
                 return;
             }
 
@@ -311,7 +311,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (enableDebugLog)
                 {
-                    LogWarning($"MonitorDisplay (ID: {monitorId}): 表示できるカメラがありません");
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): no camera available to display");
                 }
                 return;
             }
@@ -332,7 +332,7 @@ namespace ApoLab.SurveillanceSystem
             {
                 if (enableDebugLog)
                 {
-                    LogWarning($"MonitorDisplay (ID: {monitorId}): 表示できるカメラがありません");
+                    LogWarning($"MonitorDisplay (ID: {monitorId}): no camera available to display");
                 }
                 return;
             }

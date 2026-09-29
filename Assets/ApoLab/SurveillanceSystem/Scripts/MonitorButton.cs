@@ -22,28 +22,28 @@ namespace ApoLab.SurveillanceSystem
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class MonitorButton : UdonSharpBehaviour
     {
-        [Header("ボタン設定")]
-        [Tooltip("操作するモニター")]
+        [Header("Button")]
+        [Tooltip("Monitor to control\n操作するモニター")]
         public MonitorDisplay targetMonitor;
 
-        [Tooltip("押したときの動作")]
+        [Tooltip("Action when pressed\n押したときの動作")]
         public MonitorButtonAction action = MonitorButtonAction.Next;
 
         [Tooltip("Show the Interaction Text in the player's language (EN/JA/KO/ZH). While on, the Interaction Text field is not used\nプレイヤーの言語に合わせて Interaction Text を切り替える（英・日・韓・中）。ON の間は Interaction Text の欄は使われない")]
         public bool autoLocalize = true;
 
-        [Header("押し込み")]
-        [Tooltip("押し込むオブジェクト（空ならこのオブジェクト）")]
+        [Header("Press Animation")]
+        [Tooltip("Object to push in (empty = this object)\n押し込むオブジェクト（空ならこのオブジェクト）")]
         public Transform pressTarget;
 
-        [Tooltip("押し込む量（ローカル座標）")]
+        [Tooltip("Push offset (local space)\n押し込む量（ローカル座標）")]
         public Vector3 pressOffset = new Vector3(0f, 0f, 0.004f);
 
-        [Tooltip("押し込んでいる時間（秒）")]
+        [Tooltip("How long it stays pushed (seconds)\n押し込んでいる時間（秒）")]
         public float pressDuration = 0.15f;
 
-        [Header("デバッグ設定")]
-        [Tooltip("デバッグログを出力するかどうか")]
+        [Header("Debug")]
+        [Tooltip("Output debug logs\nデバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
 
         // 内部状態管理
@@ -59,7 +59,7 @@ namespace ApoLab.SurveillanceSystem
 
             if (targetMonitor == null)
             {
-                LogError($"{gameObject.name}: targetMonitorが設定されていません");
+                LogError($"{gameObject.name}: targetMonitor is not set");
                 // 押しても何も起きないボタンに Use の表示を出さない
                 DisableInteractive = true;
             }

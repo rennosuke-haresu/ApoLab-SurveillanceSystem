@@ -10,21 +10,21 @@ namespace ApoLab.SurveillanceSystem
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class CameraController : UdonSharpBehaviour
     {
-        [Header("カメラ基本設定")]
-        [Tooltip("カメラ識別ID (0から連番で設定)")]
+        [Header("Camera")]
+        [Tooltip("Camera ID (sequential from 0)\nカメラ識別ID (0から連番で設定)")]
         public int cameraId = 0;
 
-        [Tooltip("カメラ表示名 (UI表示用)")]
+        [Tooltip("Camera name shown on monitors\nカメラ表示名 (UI表示用)")]
         public string cameraName = "Camera 1";
 
-        [Tooltip("制御対象のカメラコンポーネント")]
+        [Tooltip("Camera component to control\n制御対象のカメラコンポーネント")]
         public Camera targetCamera;
 
-        [Tooltip("カメラ映像出力先のRenderTexture")]
+        [Tooltip("RenderTexture the camera renders to\nカメラ映像出力先のRenderTexture")]
         public RenderTexture renderTexture;
 
-        [Header("デバッグ設定")]
-        [Tooltip("デバッグログを出力するかどうか")]
+        [Header("Debug")]
+        [Tooltip("Output debug logs\nデバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
 
         // 内部状態管理
@@ -73,13 +73,13 @@ namespace ApoLab.SurveillanceSystem
             // 必須コンポーネントのチェック
             if (targetCamera == null)
             {
-                LogError($"CameraController (ID: {cameraId}): targetCameraが設定されていません");
+                LogError($"CameraController (ID: {cameraId}): targetCamera is not set");
                 return;
             }
 
             if (renderTexture == null)
             {
-                LogError($"CameraController (ID: {cameraId}): renderTextureが設定されていません");
+                LogError($"CameraController (ID: {cameraId}): renderTexture is not set");
                 // 出力先がないままカメラが有効だとプレイヤーの画面に直接描画されるため止める
                 targetCamera.enabled = false;
                 return;

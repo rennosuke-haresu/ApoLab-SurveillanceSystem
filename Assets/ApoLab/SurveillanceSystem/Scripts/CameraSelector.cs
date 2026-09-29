@@ -15,45 +15,45 @@ namespace ApoLab.SurveillanceSystem
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
     public class CameraSelector : UdonSharpBehaviour
     {
-        [Header("UI制御設定")]
-        [Tooltip("制御対象のモニターディスプレイ")]
+        [Header("Target")]
+        [Tooltip("Monitor display to control\n制御対象のモニターディスプレイ")]
         public MonitorDisplay targetMonitor;
 
-        [Header("UIボタン要素")]
-        [Tooltip("前のカメラボタン [◀]")]
+        [Header("Buttons")]
+        [Tooltip("Previous camera button [◀]\n前のカメラボタン [◀]")]
         public Button previousButton;
 
-        [Tooltip("前のカメラボタンのImageコンポーネント（色変更用）")]
+        [Tooltip("Image of the previous button (for color feedback)\n前のカメラボタンのImageコンポーネント（色変更用）")]
         public Image previousButtonImage;
 
-        [Tooltip("次のカメラボタン [▶]")]
+        [Tooltip("Next camera button [▶]\n次のカメラボタン [▶]")]
         public Button nextButton;
 
-        [Tooltip("次のカメラボタンのImageコンポーネント（色変更用）")]
+        [Tooltip("Image of the next button (for color feedback)\n次のカメラボタンのImageコンポーネント（色変更用）")]
         public Image nextButtonImage;
 
-        [Tooltip("表示OFFボタン [OFF]")]
+        [Tooltip("Display off button [OFF]\n表示OFFボタン [OFF]")]
         public Button offButton;
 
-        [Tooltip("OFFボタンのImageコンポーネント（色変更用）")]
+        [Tooltip("Image of the off button (for color feedback)\nOFFボタンのImageコンポーネント（色変更用）")]
         public Image offButtonImage;
 
-        [Header("UI表示要素")]
-        [Tooltip("モニター名を表示するTextMeshPro")]
+        [Header("Labels")]
+        [Tooltip("TextMeshPro that shows the monitor name\nモニター名を表示するTextMeshPro")]
         public TextMeshProUGUI monitorNameText;
 
-        [Header("視覚的フィードバック")]
-        [Tooltip("ボタン押下時の色変更")]
+        [Header("Button Feedback")]
+        [Tooltip("Change the button color when pressed\nボタン押下時の色変更")]
         public bool enableButtonFeedback = true;
 
-        [Tooltip("フィードバック用の色")]
+        [Tooltip("Feedback color\nフィードバック用の色")]
         public Color feedbackColor = Color.yellow;
 
-        [Tooltip("フィードバック表示時間")]
+        [Tooltip("Feedback duration (seconds)\nフィードバック表示時間")]
         public float feedbackDuration = 0.2f;
 
-        [Header("デバッグ設定")]
-        [Tooltip("デバッグログを出力するかどうか")]
+        [Header("Debug")]
+        [Tooltip("Output debug logs\nデバッグログを出力するかどうか")]
         public bool enableDebugLog = false;
 
         // 内部状態管理
@@ -75,7 +75,7 @@ namespace ApoLab.SurveillanceSystem
             // 必須コンポーネントのチェック
             if (targetMonitor == null)
             {
-                LogError("CameraSelector: targetMonitorが設定されていません");
+                LogError("CameraSelector: targetMonitor is not set");
                 return;
             }
 
@@ -108,19 +108,19 @@ namespace ApoLab.SurveillanceSystem
 
             if (previousButton == null)
             {
-                LogError("CameraSelector: previousButtonが設定されていません");
+                LogError("CameraSelector: previousButton is not set");
                 isValid = false;
             }
 
             if (nextButton == null)
             {
-                LogError("CameraSelector: nextButtonが設定されていません");
+                LogError("CameraSelector: nextButton is not set");
                 isValid = false;
             }
 
             if (offButton == null)
             {
-                LogError("CameraSelector: offButtonが設定されていません");
+                LogError("CameraSelector: offButton is not set");
                 isValid = false;
             }
 
