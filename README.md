@@ -1,5 +1,7 @@
 # ApoLab SurveillanceSystem
 
+[English](README_EN.md) | 日本語
+
 VRChat ワールド向け監視カメラシステムです。複数のカメラ映像をモニターに切り替え表示できます。
 
 **BOOTH**: https://apocrypha-lab.booth.pm/
@@ -13,6 +15,7 @@ VRChat ワールド向け監視カメラシステムです。複数のカメラ�
 - [◀][▶] ボタンでカメラを順送り・逆送り
 - [OFF] ボタンでモニターを黒画面に切り替え
 - 立体ボタン（MonitorButton）でも切り替え可能（自作モデルのボタンなどに）
+- 立体ボタンの表示はプレイヤーの言語に合わせて切り替え（英・日・韓・中）
 - RenderTexture による軽量なリアルタイム映像表示
 - 複数モニターで同じカメラを表示可能
 - UdonSharp 製のため改変・拡張が容易
