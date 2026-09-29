@@ -39,7 +39,7 @@ VRChat ワールド向け監視カメラシステムです。複数のカメラ�
 3. `ApoLabSurveillanceSystem_vX.X.X.unitypackage` をダブルクリックしてインポート
 4. `Assets/ApoLab/SurveillanceSystem/Scenes/SurveillanceSystemSample.unity` を開いて動作確認
 
-詳細は [Assets/ApoLab/SurveillanceSystem/Documentation/セットアップガイド.md](Assets/ApoLab/SurveillanceSystem/Documentation/セットアップガイド.md) を参照してください。
+詳細は [Assets/ApoLab/SurveillanceSystem/Documentation/SetupGuide_JA.md](Assets/ApoLab/SurveillanceSystem/Documentation/SetupGuide_JA.md) を参照してください。
 
 ---
 

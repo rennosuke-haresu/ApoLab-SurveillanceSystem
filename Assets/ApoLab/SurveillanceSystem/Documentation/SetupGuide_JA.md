@@ -1,5 +1,7 @@
 # ApoLab Surveillance System — セットアップガイド
 
+[English](SetupGuide_EN.md) | 日本語
+
 **バージョン**: 1.2.0  
 **対応 VRChat World SDK**: 3.8.2 以降（3.10.5 で動作確認）  
 **対応 Unity**: 2022.3.22f1 LTS 以降
@@ -136,11 +138,11 @@ ApoLab/SurveillanceSystem/
 
 1. ボタンにするオブジェクトに Collider を付ける
 2. `MonitorButton` を追加し、**Target Monitor** に操作するモニター、**Action** に Previous（前へ）／Next（次へ）／Off を設定する
-3. UdonBehaviour の **Interaction Text** に表示する文言（例：次のカメラ）を入れる
+3. ボタンに近づいたときの表示は、UdonBehaviour の **Interaction Text** に書いた文言になります（例：次のカメラ）。**Auto Localize** を ON にすると、プレイヤーの言語に合わせて自動で切り替わります（英語・日本語・韓国語・中国語。それ以外の言語は英語）。既定は OFF です
 
 > 💡 押すとボタンが Press Offset だけ沈みます。向きはボタンのローカル座標です
 >
-> 💡 MonitorDisplay の **状態表示（任意）** に LED などの Renderer とマテリアル 2 つを入れると、映しているときと OFF で見た目が切り替わります
+> 💡 MonitorDisplay の **Status Light (Optional)** に LED などの Renderer とマテリアル 2 つを入れると、映しているときと OFF で見た目が切り替わります
 
 ---
 
