@@ -30,7 +30,7 @@ namespace ApoLab.SurveillanceSystem
         public MonitorButtonAction action = MonitorButtonAction.Next;
 
         [Tooltip("Show the Interaction Text in the player's language (EN/JA/KO/ZH). While on, the Interaction Text field is not used\nプレイヤーの言語に合わせて Interaction Text を切り替える（英・日・韓・中）。ON の間は Interaction Text の欄は使われない")]
-        public bool autoLocalize = true;
+        public bool autoLocalize = false;
 
         [Header("Press Animation")]
         [Tooltip("Object to push in (empty = this object)\n押し込むオブジェクト（空ならこのオブジェクト）")]
