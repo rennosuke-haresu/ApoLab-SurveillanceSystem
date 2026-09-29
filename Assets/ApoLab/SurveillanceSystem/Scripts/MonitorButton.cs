@@ -1,5 +1,6 @@
 using UnityEngine;
 using UdonSharp;
+using VRC.SDKBase;
 
 namespace ApoLab.SurveillanceSystem
 {
@@ -27,6 +28,9 @@ namespace ApoLab.SurveillanceSystem
 
         [Tooltip("押したときの動作")]
         public MonitorButtonAction action = MonitorButtonAction.Next;
+
+        [Tooltip("Show the Interaction Text in the player's language (EN/JA/KO/ZH). While on, the Interaction Text field is not used\nプレイヤーの言語に合わせて Interaction Text を切り替える（英・日・韓・中）。ON の間は Interaction Text の欄は使われない")]
+        public bool autoLocalize = true;
 
         [Header("押し込み")]
         [Tooltip("押し込むオブジェクト（空ならこのオブジェクト）")]
@@ -59,6 +63,8 @@ namespace ApoLab.SurveillanceSystem
                 // 押しても何も起きないボタンに Use の表示を出さない
                 DisableInteractive = true;
             }
+
+            if (autoLocalize) ApplyLocalizedText(VRCPlayerApi.GetCurrentLanguage());
         }
 
         void OnDisable()
@@ -67,6 +73,11 @@ namespace ApoLab.SurveillanceSystem
             if (!_initialized) return;
             _pendingReleases = 0;
             pressTarget.localPosition = _restPosition;
+        }
+
+        public override void OnLanguageChanged(string language)
+        {
+            if (autoLocalize) ApplyLocalizedText(language);
         }
 
         public override void Interact()
@@ -115,6 +126,31 @@ namespace ApoLab.SurveillanceSystem
             if (_pendingReleases > 0) return;
             _pendingReleases = 0;
             pressTarget.localPosition = _restPosition;
+        }
+
+        /// <summary>
+        /// 言語と動作に合った文言を Interaction Text に入れる。表にない言語は英語
+        /// </summary>
+        private void ApplyLocalizedText(string language)
+        {
+            switch (language)
+            {
+                case "ja": InteractionText = PickText("前へ", "次へ", "オフ"); break;
+                case "ko": InteractionText = PickText("이전", "다음", "끄기"); break;
+                case "zh-CN": InteractionText = PickText("上一个", "下一个", "关闭"); break;
+                case "zh-HK": InteractionText = PickText("上一個", "下一個", "關閉"); break;
+                default: InteractionText = PickText("Previous", "Next", "Off"); break;
+            }
+        }
+
+        private string PickText(string previous, string next, string off)
+        {
+            switch (action)
+            {
+                case MonitorButtonAction.Previous: return previous;
+                case MonitorButtonAction.Off: return off;
+                default: return next;
+            }
         }
 
         #region Debug Logging
