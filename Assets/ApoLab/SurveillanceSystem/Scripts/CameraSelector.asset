@@ -97,7 +97,7 @@ MonoBehaviour:
       Data: 6|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "UI\u5236\u5FA1\u8A2D\u5B9A"
+      Data: Target
     - Name: 
       Entry: 8
       Data: 
@@ -106,7 +106,7 @@ MonoBehaviour:
       Data: 7|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u5236\u5FA1\u5BFE\u8C61\u306E\u30E2\u30CB\u30BF\u30FC\u30C7\u30A3\u30B9\u30D7\u30EC\u30A4"
+      Data: "Monitor display to control\n\u5236\u5FA1\u5BFE\u8C61\u306E\u30E2\u30CB\u30BF\u30FC\u30C7\u30A3\u30B9\u30D7\u30EC\u30A4"
     - Name: 
       Entry: 8
       Data: 
@@ -169,7 +169,7 @@ MonoBehaviour:
       Data: 11|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "UI\u30DC\u30BF\u30F3\u8981\u7D20"
+      Data: Buttons
     - Name: 
       Entry: 8
       Data: 
@@ -178,7 +178,8 @@ MonoBehaviour:
       Data: 12|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u524D\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3 [\u25C0]"
+      Data: "Previous camera button [\u25C0]\n\u524D\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3
+        [\u25C0]"
     - Name: 
       Entry: 8
       Data: 
@@ -241,7 +242,7 @@ MonoBehaviour:
       Data: 16|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u524D\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
+      Data: "Image of the previous button (for color feedback)\n\u524D\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -298,7 +299,8 @@ MonoBehaviour:
       Data: 19|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u6B21\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3 [\u25B6]"
+      Data: "Next camera button [\u25B6]\n\u6B21\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3
+        [\u25B6]"
     - Name: 
       Entry: 8
       Data: 
@@ -355,7 +357,7 @@ MonoBehaviour:
       Data: 22|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u6B21\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
+      Data: "Image of the next button (for color feedback)\n\u6B21\u306E\u30AB\u30E1\u30E9\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -412,7 +414,7 @@ MonoBehaviour:
       Data: 25|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u8868\u793AOFF\u30DC\u30BF\u30F3 [OFF]"
+      Data: "Display off button [OFF]\n\u8868\u793AOFF\u30DC\u30BF\u30F3 [OFF]"
     - Name: 
       Entry: 8
       Data: 
@@ -469,7 +471,7 @@ MonoBehaviour:
       Data: 28|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "OFF\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
+      Data: "Image of the off button (for color feedback)\nOFF\u30DC\u30BF\u30F3\u306EImage\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\uFF08\u8272\u5909\u66F4\u7528\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -532,7 +534,7 @@ MonoBehaviour:
       Data: 32|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "UI\u8868\u793A\u8981\u7D20"
+      Data: Labels
     - Name: 
       Entry: 8
       Data: 
@@ -541,7 +543,7 @@ MonoBehaviour:
       Data: 33|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30E2\u30CB\u30BF\u30FC\u540D\u3092\u8868\u793A\u3059\u308BTextMeshPro"
+      Data: "TextMeshPro that shows the monitor name\n\u30E2\u30CB\u30BF\u30FC\u540D\u3092\u8868\u793A\u3059\u308BTextMeshPro"
     - Name: 
       Entry: 8
       Data: 
@@ -604,7 +606,7 @@ MonoBehaviour:
       Data: 37|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u8996\u899A\u7684\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF"
+      Data: Button Feedback
     - Name: 
       Entry: 8
       Data: 
@@ -613,7 +615,7 @@ MonoBehaviour:
       Data: 38|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30DC\u30BF\u30F3\u62BC\u4E0B\u6642\u306E\u8272\u5909\u66F4"
+      Data: "Change the button color when pressed\n\u30DC\u30BF\u30F3\u62BC\u4E0B\u6642\u306E\u8272\u5909\u66F4"
     - Name: 
       Entry: 8
       Data: 
@@ -676,7 +678,7 @@ MonoBehaviour:
       Data: 42|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF\u7528\u306E\u8272"
+      Data: "Feedback color\n\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF\u7528\u306E\u8272"
     - Name: 
       Entry: 8
       Data: 
@@ -739,7 +741,7 @@ MonoBehaviour:
       Data: 46|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF\u8868\u793A\u6642\u9593"
+      Data: "Feedback duration (seconds)\n\u30D5\u30A3\u30FC\u30C9\u30D0\u30C3\u30AF\u8868\u793A\u6642\u9593"
     - Name: 
       Entry: 8
       Data: 
@@ -796,7 +798,7 @@ MonoBehaviour:
       Data: 49|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u8A2D\u5B9A"
+      Data: Debug
     - Name: 
       Entry: 8
       Data: 
@@ -805,7 +807,7 @@ MonoBehaviour:
       Data: 50|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
+      Data: "Output debug logs\n\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
     - Name: 
       Entry: 8
       Data: 

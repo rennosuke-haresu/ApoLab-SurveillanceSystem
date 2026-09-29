@@ -91,7 +91,7 @@ MonoBehaviour:
       Data: 5|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30E2\u30CB\u30BF\u30FC\u57FA\u672C\u8A2D\u5B9A"
+      Data: Monitor
     - Name: 
       Entry: 8
       Data: 
@@ -100,7 +100,8 @@ MonoBehaviour:
       Data: 6|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30E2\u30CB\u30BF\u30FC\u8B58\u5225ID (0\u304B\u3089\u9023\u756A\u3067\u8A2D\u5B9A)"
+      Data: "Monitor ID (sequential from 0)\n\u30E2\u30CB\u30BF\u30FC\u8B58\u5225ID
+        (0\u304B\u3089\u9023\u756A\u3067\u8A2D\u5B9A)"
     - Name: 
       Entry: 8
       Data: 
@@ -163,7 +164,7 @@ MonoBehaviour:
       Data: 10|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30E2\u30CB\u30BF\u30FC\u8868\u793A\u540D"
+      Data: "Monitor name\n\u30E2\u30CB\u30BF\u30FC\u8868\u793A\u540D"
     - Name: 
       Entry: 8
       Data: 
@@ -226,7 +227,7 @@ MonoBehaviour:
       Data: 14|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u6620\u50CF\u3092\u8868\u793A\u3059\u308BRenderer\uFF08Quad\u4F7F\u7528\uFF09"
+      Data: "Renderer that shows the video (Quad)\n\u6620\u50CF\u3092\u8868\u793A\u3059\u308BRenderer\uFF08Quad\u4F7F\u7528\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -295,7 +296,7 @@ MonoBehaviour:
       Data: 19|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u30B7\u30B9\u30C6\u30E0\u9023\u643A"
+      Data: Cameras
     - Name: 
       Entry: 8
       Data: 
@@ -304,7 +305,7 @@ MonoBehaviour:
       Data: 20|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u3053\u306E\u30E2\u30CB\u30BF\u30FC\u3067\u5207\u308A\u66FF\u3048\u308B\u30AB\u30E1\u30E9\u3002\u7A7A\u306A\u3089\u30DE\u30CD\u30FC\u30B8\u30E3\u30FC\u306E
+      Data: "Cameras this monitor switches between. Empty = the manager's All Cameras\n\u3053\u306E\u30E2\u30CB\u30BF\u30FC\u3067\u5207\u308A\u66FF\u3048\u308B\u30AB\u30E1\u30E9\u3002\u7A7A\u306A\u3089\u30DE\u30CD\u30FC\u30B8\u30E3\u30FC\u306E
         All Cameras \u3092\u4F7F\u7528\u3002\u6307\u5B9A\u3059\u308B\u3068\u3053\u306E\u30E2\u30CB\u30BF\u30FC\u3067\u306F\u305D\u306E\u30AB\u30E1\u30E9\u3060\u3051\u3092\u5207\u308A\u66FF\u3048\u308B"
     - Name: 
       Entry: 8
@@ -368,7 +369,7 @@ MonoBehaviour:
       Data: 24|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "UI\u8981\u7D20"
+      Data: UI
     - Name: 
       Entry: 8
       Data: 
@@ -377,7 +378,7 @@ MonoBehaviour:
       Data: 25|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u540D\u3092\u8868\u793A\u3059\u308BTextMeshPro"
+      Data: "TextMeshPro that shows the camera name\n\u30AB\u30E1\u30E9\u540D\u3092\u8868\u793A\u3059\u308BTextMeshPro"
     - Name: 
       Entry: 8
       Data: 
@@ -440,7 +441,7 @@ MonoBehaviour:
       Data: 29|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u8868\u793A\u8A2D\u5B9A"
+      Data: Display
     - Name: 
       Entry: 8
       Data: 
@@ -449,7 +450,7 @@ MonoBehaviour:
       Data: 30|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "OFF\u6642\u306B\u8868\u793A\u3059\u308B\u30C6\u30AF\u30B9\u30C1\u30E3\uFF08\u9ED2\u753B\u50CF\u3092\u8A2D\u5B9A\uFF09"
+      Data: "Texture shown when off (e.g. black)\nOFF\u6642\u306B\u8868\u793A\u3059\u308B\u30C6\u30AF\u30B9\u30C1\u30E3\uFF08\u9ED2\u753B\u50CF\u3092\u8A2D\u5B9A\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -506,7 +507,7 @@ MonoBehaviour:
       Data: 33|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u72B6\u614B\u8868\u793A\uFF08\u4EFB\u610F\uFF09"
+      Data: Status Light (Optional)
     - Name: 
       Entry: 8
       Data: 
@@ -515,7 +516,8 @@ MonoBehaviour:
       Data: 34|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u6620\u50CF\u306E\u6709\u7121\u3067\u8272\u3092\u5909\u3048\u308B\u30E9\u30F3\u30D7\uFF08\u672A\u8A2D\u5B9A\u306A\u3089\u4F55\u3082\u3057\u306A\u3044\uFF09"
+      Data: "Renderer whose material changes with the video state (does nothing if
+        empty)\n\u6620\u50CF\u306E\u6709\u7121\u3067\u8272\u3092\u5909\u3048\u308B\u30E9\u30F3\u30D7\uFF08\u672A\u8A2D\u5B9A\u306A\u3089\u4F55\u3082\u3057\u306A\u3044\uFF09"
     - Name: 
       Entry: 8
       Data: 
@@ -578,7 +580,7 @@ MonoBehaviour:
       Data: 38|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u6620\u3057\u3066\u3044\u308B\u3068\u304D\u306E\u30DE\u30C6\u30EA\u30A2\u30EB"
+      Data: "Material while showing video\n\u6620\u3057\u3066\u3044\u308B\u3068\u304D\u306E\u30DE\u30C6\u30EA\u30A2\u30EB"
     - Name: 
       Entry: 8
       Data: 
@@ -635,7 +637,7 @@ MonoBehaviour:
       Data: 41|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "OFF \u306E\u3068\u304D\u306E\u30DE\u30C6\u30EA\u30A2\u30EB"
+      Data: "Material while off\nOFF \u306E\u3068\u304D\u306E\u30DE\u30C6\u30EA\u30A2\u30EB"
     - Name: 
       Entry: 8
       Data: 
@@ -698,7 +700,7 @@ MonoBehaviour:
       Data: 45|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u8A2D\u5B9A"
+      Data: Debug
     - Name: 
       Entry: 8
       Data: 
@@ -707,7 +709,7 @@ MonoBehaviour:
       Data: 46|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
+      Data: "Output debug logs\n\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
     - Name: 
       Entry: 8
       Data: 

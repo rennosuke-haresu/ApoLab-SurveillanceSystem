@@ -91,7 +91,7 @@ MonoBehaviour:
       Data: 5|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30B7\u30B9\u30C6\u30E0\u57FA\u672C\u8A2D\u5B9A"
+      Data: System
     - Name: 
       Entry: 8
       Data: 
@@ -100,7 +100,7 @@ MonoBehaviour:
       Data: 6|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u81EA\u52D5\u521D\u671F\u5316\u3092\u6709\u52B9\u306B\u3059\u308B"
+      Data: "Initialize automatically on Start\n\u81EA\u52D5\u521D\u671F\u5316\u3092\u6709\u52B9\u306B\u3059\u308B"
     - Name: 
       Entry: 8
       Data: 
@@ -169,7 +169,7 @@ MonoBehaviour:
       Data: 11|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8\u7BA1\u7406"
+      Data: Components
     - Name: 
       Entry: 8
       Data: 
@@ -178,7 +178,7 @@ MonoBehaviour:
       Data: 12|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30AB\u30E1\u30E9\u30B3\u30F3\u30C8\u30ED\u30FC\u30E9\u30FC"
+      Data: "All camera controllers in the system\n\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30AB\u30E1\u30E9\u30B3\u30F3\u30C8\u30ED\u30FC\u30E9\u30FC"
     - Name: 
       Entry: 8
       Data: 
@@ -241,7 +241,7 @@ MonoBehaviour:
       Data: 16|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30E2\u30CB\u30BF\u30FC\u30C7\u30A3\u30B9\u30D7\u30EC\u30A4"
+      Data: "All monitor displays in the system\n\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30E2\u30CB\u30BF\u30FC\u30C7\u30A3\u30B9\u30D7\u30EC\u30A4"
     - Name: 
       Entry: 8
       Data: 
@@ -304,7 +304,7 @@ MonoBehaviour:
       Data: 20|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30AB\u30E1\u30E9\u30BB\u30EC\u30AF\u30BF\u30FC"
+      Data: "All camera selectors in the system\n\u30B7\u30B9\u30C6\u30E0\u5185\u306E\u5168\u30AB\u30E1\u30E9\u30BB\u30EC\u30AF\u30BF\u30FC"
     - Name: 
       Entry: 8
       Data: 
@@ -361,7 +361,7 @@ MonoBehaviour:
       Data: 23|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u8A2D\u5B9A"
+      Data: Debug
     - Name: 
       Entry: 8
       Data: 
@@ -370,7 +370,7 @@ MonoBehaviour:
       Data: 24|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
+      Data: "Output debug logs\n\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
     - Name: 
       Entry: 8
       Data: 
@@ -427,7 +427,7 @@ MonoBehaviour:
       Data: 27|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u8A73\u7D30\u306A\u30B7\u30B9\u30C6\u30E0\u60C5\u5831\u3092\u8868\u793A"
+      Data: "Show detailed system info\n\u8A73\u7D30\u306A\u30B7\u30B9\u30C6\u30E0\u60C5\u5831\u3092\u8868\u793A"
     - Name: 
       Entry: 8
       Data: 

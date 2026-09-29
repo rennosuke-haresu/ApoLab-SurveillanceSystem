@@ -91,7 +91,7 @@ MonoBehaviour:
       Data: 5|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u57FA\u672C\u8A2D\u5B9A"
+      Data: Camera
     - Name: 
       Entry: 8
       Data: 
@@ -100,7 +100,7 @@ MonoBehaviour:
       Data: 6|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u8B58\u5225ID (0\u304B\u3089\u9023\u756A\u3067\u8A2D\u5B9A)"
+      Data: "Camera ID (sequential from 0)\n\u30AB\u30E1\u30E9\u8B58\u5225ID (0\u304B\u3089\u9023\u756A\u3067\u8A2D\u5B9A)"
     - Name: 
       Entry: 8
       Data: 
@@ -163,7 +163,8 @@ MonoBehaviour:
       Data: 10|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u8868\u793A\u540D (UI\u8868\u793A\u7528)"
+      Data: "Camera name shown on monitors\n\u30AB\u30E1\u30E9\u8868\u793A\u540D
+        (UI\u8868\u793A\u7528)"
     - Name: 
       Entry: 8
       Data: 
@@ -226,7 +227,7 @@ MonoBehaviour:
       Data: 14|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u5236\u5FA1\u5BFE\u8C61\u306E\u30AB\u30E1\u30E9\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8"
+      Data: "Camera component to control\n\u5236\u5FA1\u5BFE\u8C61\u306E\u30AB\u30E1\u30E9\u30B3\u30F3\u30DD\u30FC\u30CD\u30F3\u30C8"
     - Name: 
       Entry: 8
       Data: 
@@ -289,7 +290,7 @@ MonoBehaviour:
       Data: 18|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30AB\u30E1\u30E9\u6620\u50CF\u51FA\u529B\u5148\u306ERenderTexture"
+      Data: "RenderTexture the camera renders to\n\u30AB\u30E1\u30E9\u6620\u50CF\u51FA\u529B\u5148\u306ERenderTexture"
     - Name: 
       Entry: 8
       Data: 
@@ -352,7 +353,7 @@ MonoBehaviour:
       Data: 22|UnityEngine.HeaderAttribute, UnityEngine.CoreModule
     - Name: header
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u8A2D\u5B9A"
+      Data: Debug
     - Name: 
       Entry: 8
       Data: 
@@ -361,7 +362,7 @@ MonoBehaviour:
       Data: 23|UnityEngine.TooltipAttribute, UnityEngine.CoreModule
     - Name: tooltip
       Entry: 1
-      Data: "\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
+      Data: "Output debug logs\n\u30C7\u30D0\u30C3\u30B0\u30ED\u30B0\u3092\u51FA\u529B\u3059\u308B\u304B\u3069\u3046\u304B"
     - Name: 
       Entry: 8
       Data: 
